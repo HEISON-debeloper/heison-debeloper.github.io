@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página web de HEISON</title>
+<meta name="description" content="Los juegos y productos creados por HEISON: Raíces de Niebla, MMO Naval Pirata, BoffBom, H Agripoly, Náufrago y El laboratorio de H.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://heison-debeloper.github.io/">
+<link rel="canonical" href="https://heison-debeloper.github.io/">
+<meta property="og:title" content="HEISON: juegos y productos">
+<meta property="og:description" content="Raíces de Niebla, MMO Naval Pirata, BoffBom, H Agripoly, Náufrago y El laboratorio de H.">
+<meta name="theme-color" content="#FFCC00">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230C0C0A'/%3E%3Cpath d='M9 6h4v8h6V6h4v20h-4v-8h-6v8H9z' fill='%23FFCC00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@500;600&amp;display=swap">
+<style>
+:root{
+  /* Un cartel amarillo abre la página; el catálogo va sobre negro.
+     El color de cada juego vive en su portada, que se dibuja por código. */
+  --amarillo:#FFCC00;
+  --tinta:#0C0C0A;
+  --tinta-2:#171714;
+  --linea:#2E2D27;
+  --papel:#F3F0E6;
+  --humo:#A7A396;
+  --font-cartel:"Big Shoulders Display","Big Shoulders","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --font-texto:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-dato:"Atkinson Hyperlegible Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --canal:16px;
+  color-scheme:dark;
+}
+@media (min-width:700px){:root{--canal:32px}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--tinta);color:var(--papel);font-family:var(--font-texto);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+.marco{width:min(100% - 2 * var(--canal), 1180px);margin-inline:auto}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid var(--papel);outline-offset:3px}
+.cartel a:focus-visible{outline-color:var(--tinta)}
+svg.ico{width:.8em;height:.8em;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:square}
+
+.rotulo{font:600 .78rem/1.3 var(--font-dato);letter-spacing:.08em;text-transform:uppercase;margin:0}
+
+/* Estado: la forma del punto dice lo mismo que el texto */
+.est{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.est i{width:11px;height:11px;border-radius:50%;border:2px solid currentColor;flex:none}
+.est.ya i{background:currentColor}
+.est.pub i{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+
+/* ---------- Cartel ---------- */
+.cartel{background:var(--amarillo);color:var(--tinta)}
+.barra{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding-block:14px}
+.marca{display:grid;place-items:center;width:44px;height:44px;background:var(--tinta);color:var(--amarillo);font:900 2.1rem/1 var(--font-cartel);text-decoration:none}
+.barra ul{display:flex;flex-wrap:wrap;gap:0 clamp(10px,3.2vw,30px);list-style:none;margin:0;padding:0}
+.barra li a{display:flex;align-items:center;font:600 .76rem/1 var(--font-dato);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:16px 0 14px;border-bottom:2px solid transparent}
+@media (hover:hover){.barra li a:hover{border-bottom-color:currentColor}}
+.cartel-cuerpo{display:grid;gap:30px;padding-block:clamp(18px,4vw,48px) clamp(30px,5vw,64px)}
+.titular{min-width:0}
+.titular h1{display:inline-block;white-space:nowrap;margin:.1em 0 .13em;font:900 clamp(5.5rem,33vw,18rem)/.8 var(--font-cartel);text-transform:uppercase;letter-spacing:-.01em}
+.entrada{margin:0;max-width:21em;font-size:clamp(1.15rem,2.1vw,1.45rem);line-height:1.3;font-weight:600;text-wrap:balance}
+.indice{min-width:0}
+.indice ol{list-style:none;margin:12px 0 0;padding:0;border-top:3px solid var(--tinta)}
+.indice ol > li{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--tinta)}
+.indice a.fila{flex:1;min-width:0;display:grid;grid-template-columns:2.3rem minmax(0,1fr);column-gap:6px;padding:11px 0 12px;text-decoration:none}
+.indice .n{grid-row:1 / span 2;font:500 .8rem/1 var(--font-dato);padding-top:.5em}
+.indice .nom{font:800 1.75rem/1 var(--font-cartel);text-transform:uppercase;letter-spacing:.005em}
+@media (hover:hover){.indice a.fila:hover .nom{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px}}
+.indice .meta{grid-column:2;display:flex;flex-wrap:wrap;gap:2px 16px;margin-top:6px;font:600 .74rem/1.2 var(--font-dato);letter-spacing:.05em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.jugar{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;background:var(--tinta);color:var(--amarillo);font:800 1.15rem/1 var(--font-cartel);letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+@media (hover:hover){.jugar:hover{color:#fff}}
+.indice .nuevo{background:var(--tinta);color:var(--amarillo);padding:3px 7px;margin-block:-3px}
+.leyenda{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:5px;font:500 .72rem/1.35 var(--font-dato)}
+.leyenda .est{margin-right:.7em;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.cuenta{display:inline-grid;place-items:center;min-width:1.55em;height:1.55em;margin:-.5em 0 -.5em .5em;padding:0 .3em;border-radius:1em;background:var(--tinta);color:var(--amarillo);font-variant-numeric:tabular-nums;letter-spacing:0}
+@media (min-width:900px){
+  .cartel-cuerpo{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:64px;align-items:end}
+}
+
+/* ---------- Atajos: barra que acompaña al bajar ---------- */
+[hidden]{display:none !important}
+.salto{position:absolute;left:8px;top:-80px;z-index:40;padding:14px 16px;background:var(--tinta);color:var(--amarillo);font:600 .8rem/1 var(--font-dato);letter-spacing:.05em;text-transform:uppercase}
+.salto:focus{top:8px}
+.atajo{position:sticky;top:0;z-index:20;background:var(--tinta);border-bottom:2px solid var(--amarillo)}
+.atajo .marco{display:flex;align-items:center;gap:10px;padding-block:7px}
+.atajo .marca{flex:none;width:42px;height:42px;background:var(--amarillo);color:var(--tinta);font-size:1.95rem}
+.atajo .rotulo{flex:none;color:var(--humo)}
+.atajo select{flex:1;min-width:0;max-width:24rem;height:44px;padding:0 40px 0 12px;border:1px solid #4A483F;border-radius:0;-webkit-appearance:none;appearance:none;font:600 1rem/1.2 var(--font-texto);color:var(--papel);text-overflow:ellipsis;background:var(--tinta-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23FFCC00' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center / 12px 8px}
+.atajo select:focus-visible{outline:3px solid var(--papel);outline-offset:2px}
+.atajo .secciones{display:none;gap:28px;list-style:none;margin:0 0 0 auto;padding:0}
+.atajo .secciones a{display:flex;align-items:center;padding:15px 0;font:600 .76rem/1 var(--font-dato);letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
+@media (hover:hover){.atajo .secciones a:hover{color:var(--amarillo)}}
+.atajo .cuenta{background:var(--amarillo);color:var(--tinta)}
+@media (min-width:900px){.atajo .secciones{display:flex}}
+.estante,.ficha,.pie{scroll-margin-top:66px}
+.aviso{position:fixed;left:50%;bottom:18px;z-index:40;width:max-content;max-width:min(92vw,30rem);margin:0;padding:12px 16px;background:var(--amarillo);color:var(--tinta);font:600 .92rem/1.35 var(--font-texto);text-align:center;overflow-wrap:anywhere;box-shadow:0 6px 24px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translate(-50%,10px);pointer-events:none}
+.aviso.visible{opacity:1;visibility:visible;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:no-preference){.aviso{transition:opacity .2s,transform .2s,visibility .2s}}
+
+/* ---------- Catálogo ---------- */
+.estante{padding-top:clamp(48px,8vw,96px)}
+.cabecera{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:3px solid var(--amarillo)}
+.cabecera h2,.pie h2{margin:0;font:900 clamp(2.6rem,8vw,4.5rem)/.9 var(--font-cartel);text-transform:uppercase;color:var(--amarillo)}
+.cabecera .rotulo{color:var(--humo)}
+.ficha{display:grid;gap:22px;padding-block:clamp(28px,5vw,56px);border-bottom:1px solid var(--linea)}
+.ficha:last-child{border-bottom:0;padding-bottom:0}
+.portada{position:relative;margin:0 calc(var(--canal) * -1);background:var(--tinta-2);min-width:0}
+.portada canvas{display:block;width:100%;aspect-ratio:16 / 10}
+@media (prefers-reduced-motion:no-preference){
+  .portada canvas.nueva{animation:revelar .45s ease-out}
+  @keyframes revelar{from{filter:brightness(1.9) saturate(.4)}to{filter:none}}
+}
+.portada figcaption{position:absolute;inset:auto 0 0 0;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;padding:10px;pointer-events:none}
+.semilla,.redibujar{pointer-events:auto;font:600 .72rem/1 var(--font-dato);letter-spacing:.06em;text-transform:uppercase;background:rgba(12,12,10,.84);color:var(--papel);border:0;padding:0 12px;min-height:44px;display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.semilla{min-height:30px;padding:0 10px}
+.semilla b{font-weight:600;color:var(--amarillo)}
+.redibujar{cursor:pointer}
+.redibujar:active{background:var(--amarillo);color:var(--tinta)}
+@media (hover:hover){.redibujar:hover{background:var(--amarillo);color:var(--tinta)}}
+.texto{display:grid;gap:14px;align-content:start;min-width:0}
+.texto .rotulo{color:var(--humo)}
+.texto .rotulo b{font-weight:600;color:var(--amarillo);margin-right:.7em}
+.texto h3{margin:0;font:900 clamp(2.6rem,9vw,4.1rem)/.88 var(--font-cartel);text-transform:uppercase;text-wrap:balance}
+.gancho{margin:0;font-size:1.2rem;line-height:1.35;font-weight:600;text-wrap:balance;max-width:26em}
+.datos{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:2px 0;padding:0}
+.datos li{font:600 .74rem/1 var(--font-dato);letter-spacing:.05em;text-transform:uppercase;font-variant-numeric:tabular-nums;border:1px solid var(--linea);padding:8px 10px}
+.datos li.ya{background:var(--amarillo);border-color:var(--amarillo);color:var(--tinta)}
+.datos li.pub{border-color:var(--amarillo);color:var(--amarillo)}
+.datos li.nuevo{background:var(--papel);border-color:var(--papel);color:var(--tinta)}
+.texto p{margin:0;max-width:34em}
+.puntos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.puntos li{position:relative;padding-left:1.3em;max-width:34em}
+.puntos li::before{content:"";position:absolute;left:0;top:.55em;width:.5em;height:.5em;background:var(--amarillo)}
+.texto .nota{font-size:.92rem;color:var(--humo)}
+.acciones{display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;margin-top:6px}
+.boton{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:10px 18px;border:2px solid var(--papel);font:800 1.25rem/1 var(--font-cartel);letter-spacing:.03em;text-transform:uppercase;text-decoration:none}
+.boton.principal{background:var(--amarillo);border-color:var(--amarillo);color:var(--tinta)}
+@media (hover:hover){.boton:hover{background:var(--papel);border-color:var(--papel);color:var(--tinta)}}
+.enlace{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 .8rem/1 var(--font-dato);letter-spacing:.05em;text-transform:uppercase;text-decoration:underline;text-decoration-color:var(--amarillo);text-decoration-thickness:2px;text-underline-offset:5px}
+@media (hover:hover){.enlace:hover{color:var(--amarillo)}}
+button.enlace{background:none;border:0;padding:0;color:inherit;cursor:pointer}
+.pendiente{justify-self:start;margin-top:6px !important;border:1px dashed #4A483F;padding:10px 12px;font:500 .78rem/1.3 var(--font-dato);letter-spacing:.04em;text-transform:uppercase;color:var(--humo)}
+@media (min-width:900px){
+  .ficha{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:start}
+  .portada{margin-inline:0}
+}
+
+/* ---------- Novedades ---------- */
+.bitacora{list-style:none;margin:0;padding:0}
+.bitacora li{display:grid;grid-template-columns:6.6rem minmax(0,1fr);gap:12px;padding:15px 0;border-bottom:1px solid var(--linea)}
+.bitacora time{font:500 .78rem/1.75 var(--font-dato);letter-spacing:.04em;text-transform:uppercase;color:var(--humo);font-variant-numeric:tabular-nums}
+.bitacora .cuando{display:grid;gap:1px;align-content:start}
+.hace{font:600 .7rem/1.3 var(--font-dato);letter-spacing:.04em;text-transform:uppercase;color:var(--amarillo)}
+.bitacora li.nueva{box-shadow:inset 3px 0 0 var(--amarillo);padding-left:12px}
+.bitacora li.nueva p::before{content:"Nueva";display:inline-block;margin-right:.7em;padding:3px 7px;background:var(--amarillo);color:var(--tinta);font:600 .68rem/1 var(--font-dato);letter-spacing:.06em;text-transform:uppercase;vertical-align:.12em}
+.bitacora p{margin:0;max-width:40em}
+.bitacora b{font-weight:700}
+
+/* ---------- Contacto ---------- */
+.pie{margin-top:clamp(56px,9vw,112px);border-top:3px solid var(--amarillo);padding-block:clamp(36px,6vw,64px)}
+.pie > .marco > p{margin:12px 0 0;max-width:34em}
+.canales{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--linea)}
+.canales a{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;padding:16px 0;border-bottom:1px solid var(--linea);text-decoration:none}
+.canales .red{font:800 1.9rem/1 var(--font-cartel);text-transform:uppercase}
+.canales .dir{font:500 .84rem/1.3 var(--font-dato);color:var(--amarillo);overflow-wrap:anywhere}
+@media (hover:hover){.canales a:hover .red{color:var(--amarillo)}}
+.colofon{margin-top:30px !important;font:500 .76rem/1.7 var(--font-dato);color:var(--humo);max-width:none !important}
+</style>
+</head>
+<body id="inicio">
+<a class="salto" href="#juegos">Saltar al catálogo</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-fuera" viewBox="0 0 16 16"><path d="M5 3h8v8M13 3 3 13"/></symbol>
+  <symbol id="i-copia" viewBox="0 0 16 16"><path d="M5.5 5.5h8v8h-8zM2.5 10.5v-8h8"/></symbol>
+  <symbol id="i-otra" viewBox="0 0 16 16"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2v3.2h-3.2"/></symbol>
+</svg>
+
+<header class="cartel">
+  <div class="marco">
+    <nav class="barra" aria-label="Secciones">
+      <a class="marca" href="#inicio" aria-label="HEISON: volver arriba">H</a>
+      <ul>
+        <li><a href="#juegos">Juegos</a></li>
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#novedades">Novedades</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+    <div class="cartel-cuerpo">
+      <div class="titular">
+        <p class="rotulo">Juegos y productos</p>
+        <h1 id="nombre">Heison</h1>
+        <p class="entrada">Aquí está todo lo que he creado y lo que viene. Hecho a puro código.</p>
+      </div>
+      <div class="indice">
+        <p class="rotulo" id="t-indice">Índice · 5 juegos · 1 producto</p>
+        <ol aria-labelledby="t-indice">
+          <li><a class="fila" href="#raices-de-niebla"><span class="n">01</span><span class="nom">Raíces de Niebla</span><span class="meta"><span>v0.69.0</span><span class="est ya"><i></i>Jugable ya</span></span></a><a class="jugar" href="https://heison-debeloper.github.io/raices-de-niebla/" aria-label="Jugar Raíces de Niebla en el navegador">Jugar<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a></li>
+          <li><a class="fila" href="#mmo-naval-pirata"><span class="n">02</span><span class="nom">MMO Naval Pirata</span><span class="meta"><span>v0.48.2</span><span class="est dev"><i></i>En desarrollo</span></span></a></li>
+          <li><a class="fila" href="#boffbom"><span class="n">03</span><span class="nom">BoffBom</span><span class="meta"><span>v1.9.0</span><span class="est ya"><i></i>Jugable ya</span></span></a><a class="jugar" href="https://heison-debeloper.github.io/boffbom/" aria-label="Jugar BoffBom">Jugar<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a></li>
+          <li><a class="fila" href="#h-agripoly"><span class="n">04</span><span class="nom">H Agripoly</span><span class="meta"><span>De mesa y digital</span><span class="est pub"><i></i>Por publicar</span></span></a></li>
+          <li><a class="fila" href="#naufrago"><span class="n">05</span><span class="nom">Náufrago</span><span class="meta"><span>1.ª versión</span><span class="est ya"><i></i>Jugable ya</span><span class="nuevo" data-desde="2026-11-16" hidden>Nuevo</span></span></a><a class="jugar" href="https://heison-debeloper.github.io/naufrago/" aria-label="Jugar Náufrago">Jugar<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a></li>
+          <li><a class="fila" href="#laboratorio-de-h"><span class="n">06</span><span class="nom">El laboratorio de H</span><span class="meta"><span>App</span><span class="est dev"><i></i>En desarrollo</span></span></a></li>
+        </ol>
+        <ul class="leyenda" aria-label="Qué significa cada estado">
+          <li><span class="est ya"><i></i>Jugable ya</span>se abre desde aquí</li>
+          <li><span class="est pub"><i></i>Por publicar</span>funciona; falta su enlace público</li>
+          <li><span class="est dev"><i></i>En desarrollo</span>se está construyendo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="atajo" aria-label="Atajos">
+  <div class="marco">
+    <a class="marca" href="#inicio" aria-label="Volver arriba">H</a>
+    <label class="rotulo" for="ir-a">Ir a</label>
+    <select id="ir-a">
+      <option value="inicio">Inicio e índice</option>
+      <optgroup label="Juegos">
+        <option value="raices-de-niebla">01 · Raíces de Niebla</option>
+        <option value="mmo-naval-pirata">02 · MMO Naval Pirata</option>
+        <option value="boffbom">03 · BoffBom</option>
+        <option value="h-agripoly">04 · H Agripoly</option>
+        <option value="naufrago">05 · Náufrago</option>
+      </optgroup>
+      <optgroup label="Productos">
+        <option value="laboratorio-de-h">06 · El laboratorio de H</option>
+      </optgroup>
+      <optgroup label="Más">
+        <option value="novedades">Novedades</option>
+        <option value="contacto">Contacto</option>
+      </optgroup>
+    </select>
+    <ul class="secciones">
+      <li><a href="#juegos">Juegos</a></li>
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#novedades">Novedades</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<section class="estante" id="juegos" aria-labelledby="t-juegos">
+  <div class="marco">
+    <header class="cabecera">
+      <h2 id="t-juegos">Juegos</h2>
+      <p class="rotulo">5 títulos</p>
+    </header>
+
+    <article class="ficha" id="raices-de-niebla">
+      <figure class="portada">
+        <canvas data-portada="niebla" data-semilla="2026" role="img" aria-label="Portada dibujada por código: cordillera con niebla y palmas de cera al amanecer."></canvas>
+        <figcaption><span class="semilla">Semilla <b>2026</b></span><button type="button" class="redibujar" id="redibujar-niebla"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>01</b>Supervivencia 3D</p>
+        <h3>Raíces de Niebla</h3>
+        <p class="gancho">Sobrevive en los Andes colombianos: valle, bosque de niebla, páramo y cumbre.</p>
+        <ul class="datos">
+          <li class="est ya"><i></i>Jugable ya</li>
+          <li>v0.69.0</li>
+          <li>Navegador · Android · iPhone</li>
+        </ul>
+        <p>Recoges, fabricas herramientas, construyes, cultivas, cazas y pescas mientras aguantas el frío, el hambre y el clima. El juego entero vive en un solo archivo.</p>
+        <ul class="puntos">
+          <li>Primera y tercera persona.</li>
+          <li>Herramientas por eras, de lo más primitivo al hierro.</li>
+          <li>Pesca con lanza, fisga, caña y atarraya.</li>
+          <li>Multijugador para dos en red local.</li>
+        </ul>
+        <div class="acciones">
+          <a class="boton principal" href="https://heison-debeloper.github.io/raices-de-niebla/">Jugar en el navegador<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <a class="boton" href="https://github.com/HEISON-debeloper/raices-de-niebla/releases/latest">APK para Android<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <a class="enlace" href="https://github.com/HEISON-debeloper/raices-de-niebla">Código en GitHub<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <button type="button" class="enlace" id="copiar-raices" data-copiar="https://heison-debeloper.github.io/raices-de-niebla/"><svg class="ico" aria-hidden="true"><use href="#i-copia"/></svg>Copiar enlace del juego</button>
+        </div>
+        <p class="nota">En iPhone: ábrelo en Safari y elige Compartir, luego Añadir a pantalla de inicio.</p>
+      </div>
+    </article>
+
+    <article class="ficha" id="mmo-naval-pirata">
+      <figure class="portada">
+        <canvas data-portada="mar" data-semilla="1715" role="img" aria-label="Portada dibujada por código: velero de noche en mar abierto, con luna y estrellas."></canvas>
+        <figcaption><span class="semilla">Semilla <b>1715</b></span><button type="button" class="redibujar" id="redibujar-mar"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>02</b>Piratas en mar abierto</p>
+        <h3>MMO Naval Pirata</h3>
+        <p class="gancho">Empiezas en una balsa y terminas al mando de un navío de cuatro puentes.</p>
+        <ul class="datos">
+          <li class="est dev"><i></i>En desarrollo</li>
+          <li>v0.48.2</li>
+          <li>Unity 6</li>
+          <li>Busca patrocinadores</li>
+        </ul>
+        <p>Un mar sin fin lleno de islas, con día y noche y un clima distinto en cada zona. Contratas tripulación con sueldo y moral, comercias en los mercados, peleas a cañonazos y abordas barcos piratas.</p>
+        <ul class="puntos">
+          <li>15 moldes de barco, de la balsa al navío de cuatro puentes.</li>
+          <li>Seis pactos malditos: una ventaja con su precio. Si tu barco se hunde, el mar cobra la deuda.</li>
+          <li>La isla que descubres lleva el nombre que le pongas, para siempre.</li>
+          <li>Los barcos hundidos quedan en el mar como pecios.</li>
+        </ul>
+        <p class="nota">Por ahora es un prototipo de formas simples y se juega en solitario. La meta es un mar compartido en línea.</p>
+        <div class="acciones">
+          <a class="boton" href="https://github.com/HEISON-debeloper/mmo-naval-pirata/blob/main/CHANGELOG.md">Historial de versiones<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <a class="enlace" href="https://github.com/HEISON-debeloper/mmo-naval-pirata">Código en GitHub<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="ficha" id="boffbom">
+      <figure class="portada">
+        <canvas data-portada="boffbom" data-semilla="190" role="img" aria-label="Portada dibujada por código: hormigas con jetpack entre flores gigantes, una bomba y una explosión."></canvas>
+        <figcaption><span class="semilla">Semilla <b>0190</b></span><button type="button" class="redibujar" id="redibujar-boffbom"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>03</b>Disparos 2D con jetpack</p>
+        <h3>BoffBom</h3>
+        <p class="gancho">Hormigas con jetpack, armas y bombas en partidas rápidas.</p>
+        <ul class="datos">
+          <li class="est ya"><i></i>Jugable ya</li>
+          <li>v1.9.0</li>
+          <li>Android · PC · Web</li>
+        </ul>
+        <p>Juegas solo contra bots o con amigos, por wifi en la misma red o en salas en línea con código. Se controla con pantalla táctil, con teclado y ratón, o con mando.</p>
+        <ul class="puntos">
+          <li>Modos como Todos contra todos, Juego de armas y Francotiradores.</li>
+          <li>Mapas como Mina Abandonada, Jardín Gigante y Base del Desierto.</li>
+          <li>Armería: cada arma con su piel, su nombre y sus maestrías.</li>
+          <li>Retos diarios, logros y niveles.</li>
+        </ul>
+        <div class="acciones">
+          <a class="boton principal" href="https://heison-debeloper.github.io/boffbom/">Jugar BoffBom<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <button type="button" class="enlace" id="copiar-boffbom" data-copiar="https://heison-debeloper.github.io/boffbom/"><svg class="ico" aria-hidden="true"><use href="#i-copia"/></svg>Copiar enlace del juego</button>
+        </div>
+        <p class="nota">Se juega en el navegador, con bots o con amigos en salas con código.</p>
+      </div>
+    </article>
+
+    <article class="ficha" id="h-agripoly">
+      <figure class="portada">
+        <canvas data-portada="agripoly" data-semilla="96" role="img" aria-label="Portada dibujada por código: tablero de 96 casillas en cuatro anillos de color, con fichas, dados y monedas."></canvas>
+        <figcaption><span class="semilla">Semilla <b>0096</b></span><button type="button" class="redibujar" id="redibujar-agripoly"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>04</b>Juego de mesa de estrategia agrícola</p>
+        <h3>H Agripoly</h3>
+        <p class="gancho">Compra lotes, cuida tus cultivos y aguanta el clima, el mercado y las plagas.</p>
+        <ul class="datos">
+          <li class="est pub"><i></i>Por publicar</li>
+          <li>De mesa y digital</li>
+          <li>Hasta 8 jugadores</li>
+        </ul>
+        <p>El tablero es una espiral de 96 casillas que sube por cuatro pisos térmicos: tierra caliente, clima medio, clima frío y cumbre. Todo se paga en Hcoyns.</p>
+        <ul class="puntos">
+          <li>34 cartas: 12 de Clima, 12 de Mercado y 10 de Plagas.</li>
+          <li>Contra las plagas eliges: insectario de control biológico, en tres niveles, o agroquímico, que va creando resistencia.</li>
+          <li>Ocho fichas, entre ellas el tractor, la mula cargada de café y la crisopa.</li>
+          <li>La versión digital trae partidas en línea y rivales que maneja el juego.</li>
+        </ul>
+        <p class="nota">Creado por HEISON S.F.C.</p>
+        <p class="pendiente">Su versión en línea necesita un servidor propio</p>
+      </div>
+    </article>
+
+    <article class="ficha" id="naufrago">
+      <figure class="portada">
+        <canvas data-portada="naufrago" data-semilla="300" role="img" aria-label="Portada dibujada por código: isla vista desde arriba con playa, bosque, fogata y un barco de rescate."></canvas>
+        <figcaption><span class="semilla">Semilla <b>0300</b></span><button type="button" class="redibujar" id="redibujar-naufrago"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>05</b>RPG de supervivencia 2D</p>
+        <h3>Náufrago</h3>
+        <p class="gancho">Despiertas en una isla desierta. Aguanta hasta que te rescaten.</p>
+        <ul class="datos">
+          <li class="est ya"><i></i>Jugable ya</li>
+          <li class="nuevo" data-desde="2026-11-16" hidden>Nuevo</li>
+          <li>1.ª versión</li>
+          <li>Navegador del celular</li>
+        </ul>
+        <p>Cada partida crea una isla distinta, con playa, pradera, bosque, rocas y lagos de agua dulce. Cuidas la salud, el hambre y la sed. De noche atacan los jabalíes, pero el fuego los espanta.</p>
+        <ul class="puntos">
+          <li>Subes de nivel al recoger, cazar y construir.</li>
+          <li>Nueve recetas, del hacha de piedra a la hoguera de señal.</li>
+          <li>Un día dura cinco minutos.</li>
+          <li>Enciende la hoguera de señal en la playa y un barco te recoge al amanecer.</li>
+        </ul>
+        <div class="acciones">
+          <a class="boton principal" href="https://heison-debeloper.github.io/naufrago/">Jugar Náufrago<svg class="ico" aria-hidden="true"><use href="#i-fuera"/></svg></a>
+          <button type="button" class="enlace" id="copiar-naufrago" data-copiar="https://heison-debeloper.github.io/naufrago/"><svg class="ico" aria-hidden="true"><use href="#i-copia"/></svg>Copiar enlace del juego</button>
+        </div>
+        <p class="nota">Se juega en el navegador del celular o del computador. La partida se guarda sola en ese navegador.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="estante" id="productos" aria-labelledby="t-productos">
+  <div class="marco">
+    <header class="cabecera">
+      <h2 id="t-productos">Productos</h2>
+      <p class="rotulo">1 herramienta</p>
+    </header>
+
+    <article class="ficha" id="laboratorio-de-h">
+      <figure class="portada">
+        <canvas data-portada="laboratorio" data-semilla="12" role="img" aria-label="Portada dibujada por código: pantalla negra y amarilla con cámaras de adultos y de larvas."></canvas>
+        <figcaption><span class="semilla">Semilla <b>0012</b></span><button type="button" class="redibujar" id="redibujar-laboratorio"><svg class="ico" aria-hidden="true"><use href="#i-otra"/></svg>Redibujar</button></figcaption>
+      </figure>
+      <div class="texto">
+        <p class="rotulo"><b>06</b>App de laboratorio</p>
+        <h3>El laboratorio de H</h3>
+        <p class="gancho">El cuaderno de un laboratorio de cría de crisopas, en el celular y sin internet.</p>
+        <ul class="datos">
+          <li class="est dev"><i></i>En desarrollo</li>
+          <li>Funciona sin conexión</li>
+        </ul>
+        <p>Las crisopas son insectos que se crían para controlar plagas sin químicos. La app está pensada para anotar cada cámara de adultos y de larvas: el peso de los huevos en cada cosecha, los adultos vivos y muertos, el alimento y el agua.</p>
+        <ul class="puntos">
+          <li>Cámaras con código propio o contadas en grupo.</li>
+          <li>Muestra cuántos días han pasado desde cada cosecha.</li>
+          <li>Foto adjunta en cada conteo de adultos.</li>
+          <li>Envía los datos apenas vuelve la conexión.</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="estante" id="novedades" aria-labelledby="t-novedades">
+  <div class="marco">
+    <header class="cabecera">
+      <h2 id="t-novedades">Novedades</h2>
+      <p class="rotulo" id="novedades-estado">Lo último primero</p>
+    </header>
+    <ol class="bitacora" reversed>
+      <li data-n="9"><div class="cuando"><time datetime="2026-11-16">16 nov 2026</time><span class="hace"></span></div><p><b>Dirección propia</b>: la página, Náufrago y BoffBom ya están en heison-debeloper.github.io, abiertos para todos.</p></li>
+      <li data-n="8"><div class="cuando"><time datetime="2026-11-16">16 nov 2026</time><span class="hace"></span></div><p><b>BoffBom</b> ya se puede jugar desde esta página.</p></li>
+      <li data-n="7"><div class="cuando"><time datetime="2026-11-16">16 nov 2026</time><span class="hace"></span></div><p><b>Náufrago</b> ya se puede jugar desde esta página.</p></li>
+      <li data-n="6"><div class="cuando"><time datetime="2026-11-16">16 nov 2026</time><span class="hace"></span></div><p><b>Página v1.1</b>: barra para ir a cualquier juego, botón Jugar en el índice, copiar enlace y novedades con el tiempo transcurrido.</p></li>
+      <li data-n="5"><div class="cuando"><time datetime="2026-11-16">16 nov 2026</time><span class="hace"></span></div><p><b>Abre esta página</b>, con 5 juegos y 1 producto.</p></li>
+      <li data-n="4"><div class="cuando"><time datetime="2026-11-15">15 nov 2026</time><span class="hace"></span></div><p><b>Náufrago</b>: primera versión.</p></li>
+      <li data-n="3"><div class="cuando"><time datetime="2026-11-15">15 nov 2026</time><span class="hace"></span></div><p><b>BoffBom 1.9.0</b>: lista para Android, PC y web.</p></li>
+      <li data-n="2"><div class="cuando"><time datetime="2026-11-11">11 nov 2026</time><span class="hace"></span></div><p><b>Raíces de Niebla 0.69.0</b>: peces en ríos y lagos, herramientas de pesca y manos nuevas en primera persona.</p></li>
+      <li data-n="1"><div class="cuando"><time datetime="2026-11-11">11 nov 2026</time><span class="hace"></span></div><p><b>MMO Naval Pirata 0.48.2</b>: ajuste gráfico según el teléfono y barcos que aparecen sin tirones.</p></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="pie" id="contacto">
+  <div class="marco">
+    <h2>Contacto</h2>
+    <p>Por ahora me encuentras aquí.</p>
+    <ul class="canales">
+      <li><a href="https://www.youtube.com/@H3_NIX"><span class="red">YouTube · HE NIX</span><span class="dir">youtube.com/@H3_NIX</span></a></li>
+      <li><a href="https://github.com/HEISON-debeloper"><span class="red">GitHub</span><span class="dir">github.com/HEISON-debeloper</span></a></li>
+    </ul>
+    <p class="colofon">© 2026 HEISON · Página v1.4 · Actualizada el 16 de noviembre de 2026<br>Las portadas no son imágenes: tu pantalla las dibuja con código, y cada semilla da una distinta.</p>
+  </div>
+</footer>
+
+<p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+
+<script>
+(function () {
+  'use strict';
+  var TAU = Math.PI * 2;
+  var F_CARTEL = '"Big Shoulders Display","Big Shoulders","Arial Narrow",Impact,sans-serif';
+  var F_DATO = '"Atkinson Hyperlegible Mono",ui-monospace,Menlo,Consolas,monospace';
+
+  /* ---------- Utilidades: azar con semilla, ruido y color ---------- */
+  function azar(semilla) {
+    var a = semilla >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function ruido1(R) {
+    var v = [], i;
+    for (i = 0; i < 64; i++) v.push(R());
+    return function (x) {
+      var k = Math.floor(x), f = x - k, a = v[k & 63], b = v[(k + 1) & 63], s = f * f * (3 - 2 * f);
+      return a + (b - a) * s;
+    };
+  }
+  function fbm(n, x, oct) {
+    var s = 0, a = .5, f = 1, t = 0, o;
+    for (o = 0; o < oct; o++) { s += a * n(x * f + o * 17.3); t += a; a *= .5; f *= 2; }
+    return s / t;
+  }
+  function ruido2(R) {
+    var N = 32, v = [], i;
+    for (i = 0; i < N * N; i++) v.push(R());
+    function g(x, y) { return v[(((y % N) + N) % N) * N + (((x % N) + N) % N)]; }
+    return function (x, y) {
+      var xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi;
+      var sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+      var a = g(xi, yi) + (g(xi + 1, yi) - g(xi, yi)) * sx;
+      var b = g(xi, yi + 1) + (g(xi + 1, yi + 1) - g(xi, yi + 1)) * sx;
+      return a + (b - a) * sy;
+    };
+  }
+  function fbm2(n, x, y) {
+    return n(x, y) * .55 + n(x * 2.1 + 7.7, y * 2.1 + 3.1) * .3 + n(x * 4.3 + 1.3, y * 4.3 + 9.2) * .15;
+  }
+  function rgb(hex) { var n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  function mezcla(a, b, t) {
+    var A = rgb(a), B = rgb(b);
+    return 'rgb(' + Math.round(A[0] + (B[0] - A[0]) * t) + ',' + Math.round(A[1] + (B[1] - A[1]) * t) + ',' + Math.round(A[2] + (B[2] - A[2]) * t) + ')';
+  }
+  function matiz(hex, d) { return d >= 0 ? mezcla(hex, '#ffffff', d) : mezcla(hex, '#000000', -d); }
+  function caja(c, x, y, w, h, r) {
+    c.beginPath(); c.moveTo(x + r, y); c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+    c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r);
+    c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y); c.closePath();
+  }
+  function disco(c, x, y, r) { c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill(); }
+  function estrella(c, x, y, r1, r2, n, rot, col) {
+    var i, r, a;
+    c.fillStyle = col; c.beginPath();
+    for (i = 0; i < n * 2; i++) { r = i % 2 ? r2 : r1; a = rot + i / (n * 2) * TAU; c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r); }
+    c.closePath(); c.fill();
+  }
+
+  var P = {};
+
+  /* ---------- 01 · Raíces de Niebla: cordillera, niebla y palmas de cera ---------- */
+  P.niebla = function (c, W, H, R) {
+    var g = c.createLinearGradient(0, 0, 0, H), k, a;
+    g.addColorStop(0, '#10303c'); g.addColorStop(.4, '#4d8387'); g.addColorStop(.68, '#e7c79c'); g.addColorStop(1, '#f3ddc2');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    var sx = W * (.18 + .64 * R()), sy = H * (.3 + .08 * R());
+    g = c.createRadialGradient(sx, sy, 0, sx, sy, H * .55);
+    g.addColorStop(0, 'rgba(255,241,208,.9)'); g.addColorStop(.22, 'rgba(255,233,190,.38)'); g.addColorStop(1, 'rgba(255,233,190,0)');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.fillStyle = '#fff7df'; disco(c, sx, sy, H * .05);
+    var tonos = ['#97b6b3', '#719c98', '#4d7f78', '#2f6259', '#1a453e', '#0c2722'], cresta = null;
+    tonos.forEach(function (tono, i) {
+      var n = ruido1(R), base = H * (.47 + i * .095), amp = H * (.36 - i * .04), frec = 1.2 + i * .7, corr = R() * 50, x;
+      var y = function (px) {
+        var f = fbm(n, px / W * frec + corr, 4), pico = 1 - Math.abs(2 * f - 1);
+        return base - amp * ((i < 3 ? .55 * pico + .45 * f : f) - .5);
+      };
+      c.fillStyle = tono; c.beginPath(); c.moveTo(0, H);
+      for (x = 0; x <= W + 3; x += 3) c.lineTo(x, y(x));
+      c.lineTo(W, H); c.closePath(); c.fill();
+      if (i < tonos.length - 1) {
+        var y0 = base - amp * .1, y1 = base + H * .17, nb = c.createLinearGradient(0, y0, 0, y1);
+        nb.addColorStop(0, 'rgba(240,243,234,0)'); nb.addColorStop(.6, 'rgba(240,243,234,' + (.55 - i * .06) + ')'); nb.addColorStop(1, 'rgba(240,243,234,0)');
+        c.fillStyle = nb; c.fillRect(0, y0, W, y1 - y0);
+      }
+      cresta = y;
+    });
+    c.strokeStyle = '#07191a'; c.lineCap = 'round';
+    var np = 3 + Math.floor(R() * 4);
+    for (k = 0; k < np; k++) {
+      var px = W * (.05 + .9 * R()), py = cresta(px) + 3, alto = H * (.2 + .22 * R()), inc = (R() - .5) * H * .05;
+      var tx = px + inc, ty = py - alto, L = H * (.045 + .02 * R());
+      c.lineWidth = Math.max(1.5, W * .0034);
+      c.beginPath(); c.moveTo(px, py); c.quadraticCurveTo(px + inc * .15, py - alto * .55, tx, ty); c.stroke();
+      c.lineWidth = Math.max(1, W * .0022);
+      for (a = 0; a < 9; a++) {
+        var ang = -Math.PI + a / 8 * Math.PI + (R() - .5) * .25;
+        c.beginPath(); c.moveTo(tx, ty);
+        c.quadraticCurveTo(tx + Math.cos(ang) * L * .7, ty + Math.sin(ang) * L * .9, tx + Math.cos(ang) * L, ty + Math.sin(ang) * L * .5 + L * .45);
+        c.stroke();
+      }
+    }
+  };
+
+  /* ---------- 02 · MMO Naval Pirata: velero de noche (de 1 a 3 palos según la semilla) ---------- */
+  P.mar = function (c, W, H, R) {
+    var hz = H * .56, i, b, x, g = c.createLinearGradient(0, 0, 0, hz);
+    g.addColorStop(0, '#050916'); g.addColorStop(.6, '#102246'); g.addColorStop(1, '#274677');
+    c.fillStyle = g; c.fillRect(0, 0, W, hz + 1);
+    for (i = 0; i < 90; i++) { c.fillStyle = 'rgba(255,255,255,' + (.2 + .6 * R()) + ')'; disco(c, R() * W, R() * hz * .88, (.4 + R() * .8) * Math.max(1, W / 620)); }
+    var lx = W * (.58 + .3 * R()), ly = H * (.13 + .1 * R()), lr = H * .068;
+    g = c.createRadialGradient(lx, ly, lr * .5, lx, ly, lr * 5.5);
+    g.addColorStop(0, 'rgba(243,235,207,.42)'); g.addColorStop(1, 'rgba(243,235,207,0)');
+    c.fillStyle = g; c.fillRect(0, 0, W, hz);
+    c.fillStyle = '#f3ebcf'; disco(c, lx, ly, lr);
+    c.fillStyle = 'rgba(150,140,110,.28)'; disco(c, lx - lr * .3, ly - lr * .2, lr * .22); disco(c, lx + lr * .28, ly + lr * .3, lr * .16); disco(c, lx + lr * .2, ly - lr * .45, lr * .1);
+    c.fillStyle = '#0b1630';
+    for (i = 0; i < 2; i++) {
+      var ix = W * R() * .8, iw = W * (.12 + .16 * R()), ih = H * (.03 + .05 * R());
+      c.beginPath(); c.moveTo(ix, hz + 1); c.quadraticCurveTo(ix + iw * .25, hz - ih * 1.7, ix + iw * .55, hz - ih * .6);
+      c.quadraticCurveTo(ix + iw * .8, hz - ih * 1.1, ix + iw, hz + 1); c.closePath(); c.fill();
+    }
+    g = c.createLinearGradient(0, hz, 0, H); g.addColorStop(0, '#1c3b68'); g.addColorStop(1, '#030814');
+    c.fillStyle = g; c.fillRect(0, hz, W, H - hz);
+    var brillos = [];
+    for (i = 0; i < 54; i++) {
+      var t = i / 54;
+      brillos.push([hz + 2 + t * t * (H - hz), W * .012 + t * W * .12 * (.35 + R()), lx + (R() - .5) * W * (.02 + t * .1), .55 * (1 - t * .8) * (.3 + .7 * R())]);
+    }
+    function reflejo(y0, y1) {
+      brillos.forEach(function (q) {
+        if (q[0] < y0 || q[0] >= y1) return;
+        c.fillStyle = 'rgba(243,235,207,' + q[3] + ')'; c.fillRect(q[2] - q[1] / 2, q[0], q[1], Math.max(1, H * .004));
+      });
+    }
+    var yBanda = function (n) { return hz + (H - hz) * (.12 + n * .2); };
+    reflejo(hz, yBanda(0));
+    for (b = 0; b < 5; b++) {
+      var yb = yBanda(b), amp = H * (.007 + b * .006), k = TAU / (W * (.2 + b * .08)), ph = R() * TAU;
+      if (b === 2) barco(yb + amp);
+      c.fillStyle = mezcla('#17335c', '#040915', b / 4); c.beginPath(); c.moveTo(0, H);
+      for (x = 0; x <= W + 4; x += 4) c.lineTo(x, yb + amp * Math.sin(x * k + ph) + amp * .5 * Math.sin(x * k * 2.3 + ph * 1.7));
+      c.lineTo(W, H); c.closePath(); c.fill();
+      c.strokeStyle = 'rgba(175,205,245,' + (.26 - b * .03) + ')'; c.lineWidth = 1.2; c.beginPath();
+      for (x = 0; x <= W + 4; x += 4) c.lineTo(x, yb + amp * Math.sin(x * k + ph) + amp * .5 * Math.sin(x * k * 2.3 + ph * 1.7));
+      c.stroke();
+      reflejo(yb + amp * 1.5, b < 4 ? yBanda(b + 1) : H);
+    }
+
+    function barco(yw) {
+      var m = 1 + Math.floor(R() * 3), L = W * (.2 + .075 * m), x0 = W * (.05 + R() * (.91 - 1.22 * (.2 + .075 * m))), hh = L * .13, j, v;
+      var cub = yw - hh * .95;
+      for (j = 0; j < m; j++) {
+        var mx = x0 + L * (m === 1 ? .5 : .28 + j * (.5 / (m - 1)));
+        var mayor = m === 1 || (m === 2 && j === 0) || (m === 3 && j === 1), mh = L * (mayor ? .8 : .64);
+        c.strokeStyle = '#03050a'; c.lineWidth = Math.max(1.5, L * .012); c.lineCap = 'butt';
+        c.beginPath(); c.moveTo(mx, cub); c.lineTo(mx, cub - mh); c.stroke();
+        var nv = mayor ? 3 : 2, yv = cub - mh * .13, hv = mh * .82 / nv * .9;
+        for (v = 0; v < nv; v++) {
+          var w0 = L * (.2 - v * .035) * (mayor ? 1 : .86), w1 = w0 * .82, yt = yv - hv;
+          var vg = c.createLinearGradient(mx - w0 / 2, 0, mx + w0 / 2, 0);
+          vg.addColorStop(0, '#8d8873'); vg.addColorStop(.62, '#e3dabd'); vg.addColorStop(1, '#c6bda0');
+          c.fillStyle = vg; c.beginPath(); c.moveTo(mx - w0 / 2, yv);
+          c.quadraticCurveTo(mx - w0 / 2 + w0 * .09, (yv + yt) / 2, mx - w1 / 2, yt); c.lineTo(mx + w1 / 2, yt);
+          c.quadraticCurveTo(mx + w0 / 2 + w0 * .13, (yv + yt) / 2, mx + w0 / 2, yv);
+          c.quadraticCurveTo(mx, yv - hv * .14, mx - w0 / 2, yv); c.closePath(); c.fill();
+          yv = yt - mh * .03;
+        }
+        if (mayor) {
+          c.fillStyle = '#b3242e'; c.beginPath(); c.moveTo(mx, cub - mh); c.lineTo(mx - L * .1, cub - mh + L * .024); c.lineTo(mx, cub - mh + L * .05); c.closePath(); c.fill();
+        }
+      }
+      var fxm = x0 + L * (m === 1 ? .5 : .78), fmh = L * (m === 1 ? .8 : .64);
+      c.fillStyle = 'rgba(214,205,176,.92)'; c.beginPath();
+      c.moveTo(fxm + L * .015, cub - fmh * .9); c.lineTo(x0 + L * 1.19, yw - hh * 1.66); c.lineTo(fxm + L * .06, cub - fmh * .16); c.closePath(); c.fill();
+      c.fillStyle = '#03050a'; c.beginPath();
+      c.moveTo(x0 + L * .02, yw + hh * .2);
+      c.lineTo(x0 - L * .02, yw - hh * 1.75); c.lineTo(x0 + L * .2, yw - hh * 1.6); c.lineTo(x0 + L * .22, yw - hh * 1.05);
+      c.quadraticCurveTo(x0 + L * .6, yw - hh * .82, x0 + L * .93, yw - hh * 1.2);
+      c.lineTo(x0 + L * 1.22, yw - hh * 1.8); c.lineTo(x0 + L * 1.2, yw - hh * 1.62); c.lineTo(x0 + L * .99, yw - hh * .95);
+      c.quadraticCurveTo(x0 + L * .96, yw - hh * .2, x0 + L * .86, yw + hh * .2); c.closePath(); c.fill();
+      c.fillStyle = '#ffc657';
+      for (j = 0; j < 2; j++) c.fillRect(x0 + L * (.03 + j * .07), yw - hh * 1.42, L * .04, hh * .3);
+      var nport = 3 + m * 2;
+      c.globalAlpha = .85;
+      for (j = 0; j < nport; j++) c.fillRect(x0 + L * (.28 + j * (.56 / (nport - 1))), yw - hh * .62, L * .02, hh * .2);
+      c.globalAlpha = 1;
+      var fg = c.createRadialGradient(x0 - L * .02, yw - hh * 1.95, 0, x0 - L * .02, yw - hh * 1.95, L * .09);
+      fg.addColorStop(0, 'rgba(255,214,130,.95)'); fg.addColorStop(.25, 'rgba(255,200,100,.4)'); fg.addColorStop(1, 'rgba(255,200,100,0)');
+      c.fillStyle = fg; disco(c, x0 - L * .02, yw - hh * 1.95, L * .09);
+    }
+  };
+
+  /* ---------- 03 · BoffBom: hormigas con jetpack en el Jardín Gigante ---------- */
+  function hormiga(c, x, y, s, dir, col) {
+    var k, g;
+    c.save(); c.translate(x, y); c.scale(dir, 1); c.rotate(-.18);
+    for (k = 0; k < 6; k++) { c.fillStyle = 'rgba(255,255,255,' + (.5 - k * .075) + ')'; disco(c, -.5 * s - k * .16 * s, .9 * s + k * .42 * s, s * (.16 + k * .05)); }
+    g = c.createLinearGradient(0, .05 * s, 0, .95 * s); g.addColorStop(0, '#fff3b0'); g.addColorStop(.5, '#ffb21f'); g.addColorStop(1, 'rgba(255,90,20,0)');
+    c.fillStyle = g; c.beginPath(); c.moveTo(-.7 * s, .05 * s); c.lineTo(-.34 * s, .05 * s); c.lineTo(-.52 * s, .95 * s); c.closePath(); c.fill();
+    c.strokeStyle = '#1c1410'; c.lineWidth = Math.max(1.5, s * .1); c.lineCap = 'round'; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(.02 * s, .02 * s); c.lineTo(.3 * s, .42 * s); c.lineTo(.44 * s, .4 * s);
+    c.moveTo(-.08 * s, .05 * s); c.lineTo(.04 * s, .52 * s); c.lineTo(.2 * s, .52 * s); c.stroke();
+    c.fillStyle = col;
+    c.save(); c.translate(-.3 * s, .38 * s); c.rotate(-.45); c.beginPath(); c.ellipse(0, 0, .36 * s, .48 * s, 0, 0, TAU); c.fill(); c.restore();
+    c.beginPath(); c.ellipse(0, -.3 * s, .3 * s, .38 * s, 0, 0, TAU); c.fill();
+    disco(c, .06 * s, -.98 * s, .36 * s);
+    c.fillStyle = '#d9dde8'; caja(c, -.74 * s, -.66 * s, .36 * s, .72 * s, .1 * s); c.fill();
+    c.fillStyle = '#8f97aa'; c.fillRect(-.68 * s, -.02 * s, .24 * s, .1 * s);
+    c.beginPath(); c.moveTo(.12 * s, -.36 * s); c.lineTo(.5 * s, -.28 * s); c.stroke();
+    c.fillStyle = '#22252e'; c.fillRect(.4 * s, -.42 * s, .62 * s, .16 * s); c.fillRect(.46 * s, -.3 * s, .14 * s, .2 * s);
+    c.lineWidth = Math.max(1, s * .06);
+    c.beginPath(); c.moveTo(.1 * s, -1.3 * s); c.quadraticCurveTo(.2 * s, -1.7 * s, .5 * s, -1.72 * s);
+    c.moveTo(-.02 * s, -1.32 * s); c.quadraticCurveTo(-.02 * s, -1.75 * s, .22 * s, -1.86 * s); c.stroke();
+    c.fillStyle = '#fff'; disco(c, .2 * s, -1.02 * s, .13 * s); c.fillStyle = '#111'; disco(c, .24 * s, -1.02 * s, .06 * s);
+    c.restore();
+  }
+  P.boffbom = function (c, W, H, R) {
+    var i, p, g = c.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#58c4ee'); g.addColorStop(.7, '#bfeedd'); g.addColorStop(1, '#e9f7c9');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    for (i = 0; i < 7; i++) {
+      c.save(); c.translate(W * R(), H * (.25 + .6 * R())); c.rotate((R() - .5) * 2);
+      c.fillStyle = 'rgba(52,140,84,' + (.16 + .14 * R()) + ')'; c.beginPath(); c.ellipse(0, 0, W * (.12 + .1 * R()), H * (.07 + .05 * R()), 0, 0, TAU); c.fill(); c.restore();
+    }
+    var petalos = ['#ff6fa3', '#ffd23f', '#ffffff', '#ff8a3c', '#b78cff'], nf = 2 + Math.floor(R() * 2);
+    for (i = 0; i < nf; i++) {
+      var fx = W * ((i + .5) / nf * .86 + .07 + (R() - .5) * .08), fy = H * (.2 + .22 * R()), fr = H * (.1 + .05 * R());
+      c.strokeStyle = '#2d8a3e'; c.lineWidth = Math.max(3, W * .012); c.lineCap = 'round';
+      c.beginPath(); c.moveTo(fx + (R() - .5) * W * .1, H * 1.02); c.quadraticCurveTo(fx + (R() - .5) * W * .12, H * .6, fx, fy); c.stroke();
+      var col = petalos[Math.floor(R() * petalos.length)], npet = 7 + Math.floor(R() * 4), rot = R() * TAU;
+      for (p = 0; p < npet; p++) {
+        c.save(); c.translate(fx, fy); c.rotate(rot + p / npet * TAU); c.fillStyle = col;
+        c.beginPath(); c.ellipse(fr * .95, 0, fr * .62, fr * .3, 0, 0, TAU); c.fill(); c.restore();
+      }
+      c.fillStyle = col === '#ffd23f' ? '#8a4a1c' : '#ffcc00'; disco(c, fx, fy, fr * .42);
+      c.fillStyle = 'rgba(0,0,0,.12)'; disco(c, fx + fr * .08, fy + fr * .08, fr * .26);
+    }
+    var nm = 1 + Math.floor(R() * 2);
+    for (i = 0; i < nm; i++) {
+      var mx = W * (.1 + .72 * R()), mw = W * (.13 + .04 * R()), mh = H * (.2 + .05 * R()), my = H * .98 - mh;
+      c.fillStyle = '#b9572f'; c.beginPath(); c.moveTo(mx, my); c.lineTo(mx + mw, my); c.lineTo(mx + mw * .84, my + mh); c.lineTo(mx + mw * .16, my + mh); c.closePath(); c.fill();
+      c.fillStyle = '#d06a3c'; c.fillRect(mx - mw * .05, my - mh * .14, mw * 1.1, mh * .2);
+      c.fillStyle = 'rgba(0,0,0,.16)'; c.fillRect(mx - mw * .05, my + mh * .06, mw * 1.1, mh * .035);
+    }
+    for (i = 0; i < 46; i++) {
+      var bx = W * (i / 45) + (R() - .5) * W * .03, bh = H * (.1 + .22 * R()), bw = W * (.012 + .014 * R()), inc = (R() - .5) * W * .07;
+      c.fillStyle = ['#2f8f3a', '#1f6f2e', '#46a84a'][i % 3];
+      c.beginPath(); c.moveTo(bx - bw, H); c.quadraticCurveTo(bx - bw * .4 + inc * .3, H - bh * .6, bx + inc, H - bh);
+      c.quadraticCurveTo(bx + bw * .6 + inc * .3, H - bh * .5, bx + bw, H); c.closePath(); c.fill();
+    }
+    var ex = W * (.18 + .64 * R()), ey = H * (.3 + .3 * R()), er = H * (.11 + .04 * R());
+    estrella(c, ex, ey, er * 1.25, er * .7, 12, R() * TAU, '#ff7a1a');
+    estrella(c, ex, ey, er * .9, er * .5, 12, R() * TAU, '#ffcc00');
+    estrella(c, ex, ey, er * .5, er * .26, 10, R() * TAU, '#fff6d0');
+    c.fillStyle = '#3b2a1a';
+    for (i = 0; i < 9; i++) { var an = R() * TAU, di = er * (1.35 + R() * .8); disco(c, ex + Math.cos(an) * di, ey + Math.sin(an) * di, Math.max(1.2, er * .07 * (.4 + R()))); }
+    var bxx = W * (.2 + .6 * R()), byy = H * (.45 + .22 * R()), br = H * .06;
+    c.fillStyle = '#16161c'; disco(c, bxx, byy, br);
+    c.fillStyle = 'rgba(255,255,255,.35)'; disco(c, bxx - br * .35, byy - br * .35, br * .2);
+    c.strokeStyle = '#8a6a3a'; c.lineWidth = Math.max(2, br * .16);
+    c.beginPath(); c.moveTo(bxx + br * .5, byy - br * .8); c.quadraticCurveTo(bxx + br, byy - br * 1.5, bxx + br * 1.5, byy - br * 1.3); c.stroke();
+    estrella(c, bxx + br * 1.5, byy - br * 1.3, br * .55, br * .2, 8, R() * TAU, '#ffd23f');
+    var equipos = ['#d8412f', '#2a2533', '#2f6fd8'], nh = 2 + Math.floor(R() * 2);
+    for (i = 0; i < nh; i++) hormiga(c, W * ((i + .5) / nh * .8 + .1 + (R() - .5) * .1), H * (.32 + .34 * R()), H * (.075 + .02 * R()), R() < .5 ? 1 : -1, equipos[i % 3]);
+  };
+
+  /* ---------- 04 · H Agripoly: tablero de 96 casillas, un anillo por piso térmico ---------- */
+  P.agripoly = function (c, W, H, R) {
+    var i, j, g = c.createRadialGradient(W * .46, H * .46, H * .1, W * .5, H * .5, W * .72);
+    g.addColorStop(0, '#1f5a3a'); g.addColorStop(1, '#0b2718');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    var bw = Math.min(W * .7, H * 1.18), bh = bw * 8 / 12, m = bw * .022, cs = bw / 12, x0 = -bw / 2, y0 = -bh / 2;
+    c.save(); c.translate(W * .44, H * .5); c.rotate((R() - .5) * .14);
+    c.shadowColor = 'rgba(0,0,0,.5)'; c.shadowBlur = H * .07; c.shadowOffsetY = H * .025;
+    c.fillStyle = '#f0e6cc'; caja(c, x0 - m, y0 - m, bw + 2 * m, bh + 2 * m, bw * .014); c.fill();
+    c.shadowColor = 'transparent'; c.shadowBlur = 0; c.shadowOffsetY = 0;
+    var anillo = ['#e2973a', '#74b04f', '#3d908b', '#b9b4d9'], celdas = [];
+    for (j = 0; j < 8; j++) for (i = 0; i < 12; i++) {
+      c.fillStyle = matiz(anillo[Math.min(i, j, 11 - i, 7 - j)], (R() - .5) * .16);
+      caja(c, x0 + i * cs + cs * .05, y0 + j * cs + cs * .05, cs * .9, cs * .9, cs * .13); c.fill();
+      celdas.push([x0 + i * cs + cs / 2, y0 + j * cs + cs / 2]);
+    }
+    var tipos = ['#3f7fd0', '#d7a31c', '#2d2217'];
+    for (i = 0; i < 9; i++) {
+      var q = celdas[Math.floor(R() * 96)], tp = i % 3;
+      c.fillStyle = tipos[tp]; caja(c, q[0] - cs * .45, q[1] - cs * .45, cs * .9, cs * .9, cs * .13); c.fill();
+      c.fillStyle = 'rgba(255,255,255,.92)';
+      if (tp === 0) disco(c, q[0], q[1], cs * .17);
+      else if (tp === 1) { c.beginPath(); c.moveTo(q[0], q[1] - cs * .24); c.lineTo(q[0] + cs * .2, q[1]); c.lineTo(q[0], q[1] + cs * .24); c.lineTo(q[0] - cs * .2, q[1]); c.closePath(); c.fill(); }
+      else { disco(c, q[0] - cs * .14, q[1] + cs * .08, cs * .08); disco(c, q[0] + cs * .14, q[1] + cs * .08, cs * .08); disco(c, q[0], q[1] - cs * .13, cs * .08); }
+    }
+    ['#d8412f', '#2f6fd8', '#ffcc00', '#f4f1e8'].forEach(function (col) {
+      var f = celdas[Math.floor(R() * 96)];
+      c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(f[0] + cs * .07, f[1] + cs * .12, cs * .3, cs * .24, 0, 0, TAU); c.fill();
+      c.fillStyle = col; disco(c, f[0], f[1], cs * .29);
+      c.strokeStyle = 'rgba(0,0,0,.4)'; c.lineWidth = Math.max(1, cs * .05); c.beginPath(); c.arc(f[0], f[1], cs * .29, 0, TAU); c.stroke();
+      c.fillStyle = 'rgba(255,255,255,.5)'; disco(c, f[0] - cs * .09, f[1] - cs * .1, cs * .09);
+    });
+    c.restore();
+    var caras = [[4], [0, 8], [0, 4, 8], [0, 2, 6, 8], [0, 2, 4, 6, 8], [0, 2, 3, 5, 6, 8]];
+    for (i = 0; i < 2; i++) {
+      var s = H * .13, dx = W * (.895 + (i ? .02 : -.03)), dy = H * (.2 + i * .19) + (R() - .5) * H * .04;
+      c.save(); c.translate(dx, dy); c.rotate((R() - .5) * 1.3);
+      c.shadowColor = 'rgba(0,0,0,.45)'; c.shadowBlur = H * .03; c.shadowOffsetY = H * .012;
+      c.fillStyle = '#fbf8ef'; caja(c, -s / 2, -s / 2, s, s, s * .18); c.fill();
+      c.shadowColor = 'transparent'; c.shadowBlur = 0; c.shadowOffsetY = 0;
+      c.fillStyle = '#16130d';
+      caras[Math.floor(R() * 6)].forEach(function (pp) { disco(c, ((pp % 3) - 1) * s * .27, (Math.floor(pp / 3) - 1) * s * .27, s * .085); });
+      c.restore();
+    }
+    for (i = 0; i < 4; i++) {
+      var r = H * .058, hx = W * (.885 + (R() - .5) * .04), hy = H * (.68 - i * .028);
+      c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(hx + r * .12, hy + r * .2, r, r * .92, 0, 0, TAU); c.fill();
+      g = c.createLinearGradient(hx - r, hy - r, hx + r, hy + r); g.addColorStop(0, '#ffe27a'); g.addColorStop(1, '#c98d0a');
+      c.fillStyle = g; disco(c, hx, hy, r);
+      c.strokeStyle = '#8a5e00'; c.lineWidth = Math.max(1, r * .09); c.beginPath(); c.arc(hx, hy, r * .78, 0, TAU); c.stroke();
+      if (i === 3) { c.fillStyle = '#7a5200'; c.font = '900 ' + (r * 1.15) + 'px ' + F_CARTEL; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('H', hx, hy + r * .06); }
+    }
+  };
+
+  /* ---------- 05 · Náufrago: una isla distinta por semilla, con los colores del juego ---------- */
+  P.naufrago = function (c, W, H, R) {
+    var cols = 48, rows = 30, ts = W / cols, n = ruido2(R), nb = ruido2(R), i, j, k, t = [], pasto = [], arena = [];
+    var COL = [['#1d4e89', '#1a4780', '#24599a'], ['#3b8fd0', '#358ac6', '#4c9ddb'], ['#e8d49c', '#dcc78c', '#f2e0ad'], ['#74b356', '#68a64c', '#82c062'],
+      ['#4a8a3e', '#3f7d35', '#579a48'], ['#8f8c82', '#827f76', '#a09d93'], ['#56b8e0', '#4caed6', '#7ccbea']];
+    c.fillStyle = COL[0][0]; c.fillRect(0, 0, W, H);
+    for (j = 0; j < rows; j++) for (i = 0; i < cols; i++) {
+      var dx = (i + .5) / cols - .5, dy = ((j + .5) / rows - .5) * (rows / cols), d = Math.sqrt(dx * dx * .72 + dy * dy * 1.3);
+      var e = (.26 - d) / .26 + (fbm2(n, i * .13, j * .13) - .5) * 1.3;
+      k = e < -.22 ? 0 : e < 0 ? 1 : e < .17 ? 2 : 3;
+      if (k === 3) {
+        var b = fbm2(nb, i * .17, j * .17), r2 = fbm2(nb, i * .29 + 50, j * .29 + 50);
+        if (b < .36 && e > .45) k = 6; else if (r2 > .64 && e > .3) k = 5; else if (b > .53) k = 4;
+      }
+      t.push(k);
+      if (k === 3 && d < .12) pasto.push([i, j]);
+      if (k === 2) arena.push([i, j, d]);
+      c.fillStyle = COL[k][Math.floor(R() * 3)];
+      c.fillRect(Math.floor(i * ts), Math.floor(j * ts), Math.ceil(ts) + 1, Math.ceil(ts) + 1);
+    }
+    for (j = 0; j < rows; j++) for (i = 0; i < cols; i++) {
+      var cx = (i + .5) * ts, cy = (j + .5) * ts, r = R();
+      k = t[j * cols + i];
+      if (k === 4 && r < .7) { c.fillStyle = '#2c6a2c'; disco(c, cx, cy, ts * .46); c.fillStyle = '#4f9b45'; disco(c, cx - ts * .12, cy - ts * .14, ts * .22); }
+      else if (k === 2 && r < .07) { c.strokeStyle = '#7a5a34'; c.lineWidth = Math.max(1, ts * .14); c.beginPath(); c.moveTo(cx, cy + ts * .35); c.lineTo(cx + ts * .1, cy - ts * .1); c.stroke(); estrella(c, cx + ts * .1, cy - ts * .15, ts * .52, ts * .14, 6, r * 90, '#3f9a4a'); }
+      else if (k === 5 && r < .5) { c.fillStyle = '#6d6a62'; disco(c, cx, cy, ts * .36); c.fillStyle = '#b5b2a8'; disco(c, cx - ts * .1, cy - ts * .1, ts * .14); }
+      else if (k === 3 && r < .035) { c.fillStyle = '#3d8a3a'; disco(c, cx, cy, ts * .32); c.fillStyle = '#6a4fd0'; disco(c, cx - ts * .1, cy, ts * .09); disco(c, cx + ts * .12, cy - ts * .06, ts * .09); }
+    }
+    function luz(x, y, rad, col) {
+      var lg = c.createRadialGradient(x, y, 0, x, y, rad); lg.addColorStop(0, col); lg.addColorStop(1, 'rgba(255,150,40,0)');
+      c.fillStyle = lg; disco(c, x, y, rad);
+    }
+    var f = pasto.length ? pasto[Math.floor(R() * pasto.length)] : [cols / 2, rows / 2], fx = (f[0] + .5) * ts, fy = (f[1] + .5) * ts;
+    c.fillStyle = '#5c3b1c'; caja(c, fx + ts * 1.1, fy - ts * .8, ts * 1.6, ts * 1.4, ts * .2); c.fill();
+    c.fillStyle = '#8a5a2b'; caja(c, fx + ts * 1.25, fy - ts * .65, ts * 1.3, ts * .55, ts * .12); c.fill();
+    luz(fx, fy, ts * 4.5, 'rgba(255,196,90,.6)');
+    c.fillStyle = '#ff7a1a'; disco(c, fx, fy, ts * .36); c.fillStyle = '#ffe07a'; disco(c, fx, fy, ts * .18);
+    c.fillStyle = '#16130d'; disco(c, fx - ts * 1.1, fy + ts * .35, ts * .44);
+    c.fillStyle = '#e04a3a'; disco(c, fx - ts * 1.1, fy + ts * .35, ts * .34);
+    c.fillStyle = '#f2cfa5'; disco(c, fx - ts * 1.1, fy + ts * .25, ts * .2);
+    if (arena.length) {
+      arena.sort(function (a, b2) { return b2[2] - a[2]; });
+      var sn = arena[Math.floor(R() * Math.max(1, arena.length * .3))], sx = (sn[0] + .5) * ts, sy = (sn[1] + .5) * ts;
+      luz(sx, sy, ts * 5.5, 'rgba(255,120,60,.62)');
+      c.fillStyle = '#ff4d1a'; disco(c, sx, sy, ts * .44); c.fillStyle = '#ffd23f'; disco(c, sx, sy, ts * .22);
+    }
+    var lado = R() < .5 ? -1 : 1, bx = W * (.5 + lado * .43), by = H * (.2 + .6 * R());
+    c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = Math.max(1, ts * .12); c.lineCap = 'round';
+    c.beginPath(); c.moveTo(bx + lado * ts * 1.6, by - ts * .35); c.lineTo(bx + lado * ts * 2.8, by - ts * .6);
+    c.moveTo(bx + lado * ts * 1.6, by + ts * .35); c.lineTo(bx + lado * ts * 2.8, by + ts * .6); c.stroke();
+    c.fillStyle = '#5c3a1d'; c.beginPath(); c.ellipse(bx, by, ts * 1.5, ts * .55, 0, 0, TAU); c.fill();
+    c.fillStyle = '#f6f2e4'; c.beginPath(); c.moveTo(bx - lado * ts * .2, by - ts * .1); c.lineTo(bx + lado * ts * .9, by - ts * .15); c.lineTo(bx - lado * ts * .2, by - ts * 1.9); c.closePath(); c.fill();
+    var vg = c.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, W * .68);
+    vg.addColorStop(0, 'rgba(3,10,26,0)'); vg.addColorStop(1, 'rgba(3,10,26,.5)');
+    c.fillStyle = vg; c.fillRect(0, 0, W, H);
+  };
+
+  /* ---------- 06 · El laboratorio de H: cámaras de adultos y de larvas, en negro y amarillo ---------- */
+  P.laboratorio = function (c, W, H, R) {
+    var A = '#ffcc00', m = W * .05, gw = W - 2 * m, x, y, i, paso = W / 24;
+    c.fillStyle = '#0b0b09'; c.fillRect(0, 0, W, H);
+    c.strokeStyle = '#17160f'; c.lineWidth = 1; c.beginPath();
+    for (x = paso; x < W; x += paso) { c.moveTo(Math.round(x) + .5, 0); c.lineTo(Math.round(x) + .5, H); }
+    for (y = paso; y < H; y += paso) { c.moveTo(0, Math.round(y) + .5); c.lineTo(W, Math.round(y) + .5); }
+    c.stroke();
+    var chico = '600 ' + Math.max(8, H * .036) + 'px ' + F_DATO;
+    c.textBaseline = 'alphabetic'; c.textAlign = 'left';
+    c.fillStyle = A; c.font = '900 ' + (H * .1) + 'px ' + F_CARTEL; c.fillText('EL LABORATORIO DE H', m, H * .14);
+    c.font = chico; c.fillStyle = '#a7a396'; c.textAlign = 'right'; c.fillText('SIN CONEXIÓN', W - m, H * .135);
+    c.textAlign = 'left'; c.fillText('ADULTOS', m, H * .205);
+    var cod = ['B1', 'B2', 'B3', 'B4', 'A1', 'A2', 'A3'], cw = gw / 7, ch = H * .25, y0 = H * .225;
+    cod.forEach(function (k, n) {
+      var cx = m + n * cw, w = cw * .9;
+      c.strokeStyle = A; c.lineWidth = Math.max(1.5, W * .0028); caja(c, cx, y0, w, ch, W * .006); c.stroke();
+      c.save(); caja(c, cx, y0, w, ch, W * .006); c.clip();
+      c.fillStyle = A; c.font = '900 ' + (ch * .36) + 'px ' + F_CARTEL; c.fillText(k, cx + w * .12, y0 + ch * .42);
+      c.font = '600 ' + (w * .19) + 'px ' + F_DATO; c.fillStyle = '#f3f0e6';
+      c.fillText(k.charAt(0) === 'B' ? String(120 + Math.floor(R() * 260)) : (4 + R() * 14).toFixed(1).replace('.', ',') + ' g', cx + w * .12, y0 + ch * .66);
+      c.font = '600 ' + (w * .15) + 'px ' + F_DATO; c.fillStyle = '#a7a396';
+      c.fillText('hace ' + (1 + Math.floor(R() * 6)) + ' d', cx + w * .12, y0 + ch * .87);
+      c.restore();
+    });
+    var y1 = H * .575, nl = 13, lw = gw / nl, lh = H * .16;
+    c.font = chico; c.fillStyle = '#a7a396'; c.fillText('LARVAS 80–92', m, y1 - H * .022);
+    c.textAlign = 'center';
+    for (i = 0; i < nl; i++) {
+      var lx = m + i * lw, w2 = lw * .84, lleno = .15 + .8 * R();
+      c.fillStyle = '#1e1d15'; c.fillRect(lx, y1, w2, lh);
+      c.fillStyle = A; c.fillRect(lx, y1 + lh * (1 - lleno), w2, lh * lleno);
+      c.fillStyle = '#a7a396'; c.font = '600 ' + Math.max(7, lw * .3) + 'px ' + F_DATO; c.fillText(String(80 + i), lx + w2 / 2, y1 + lh + H * .048);
+    }
+    c.textAlign = 'left';
+    for (i = 0; i < 12; i++) {
+      var hx = W * (.3 + .4 * R()), hh = H * (.035 + .05 * R()), inc = (R() - .5) * W * .03;
+      c.strokeStyle = 'rgba(233,243,176,.7)'; c.lineWidth = 1; c.beginPath(); c.moveTo(hx, H); c.quadraticCurveTo(hx + inc * .2, H - hh * .6, hx + inc, H - hh); c.stroke();
+      c.fillStyle = '#e9f3b0'; c.beginPath(); c.ellipse(hx + inc, H - hh - H * .012, H * .007, H * .013, inc * .02, 0, TAU); c.fill();
+    }
+  };
+
+  /* ---------- Pintar, ajustar el nombre y redibujar ---------- */
+  var lienzos = Array.prototype.slice.call(document.querySelectorAll('canvas[data-portada]'));
+  function pintar(cv, forzar) {
+    var W = cv.clientWidth, H = cv.clientHeight;
+    if (!W || !H) return;
+    if (!forzar && cv._w === W && cv._h === H) return;
+    cv._w = W; cv._h = H;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    var c = cv.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try { P[cv.dataset.portada](c, W, H, azar(parseInt(cv.dataset.semilla, 10) || 1)); }
+    catch (err) { c.setTransform(dpr, 0, 0, dpr, 0, 0); c.globalAlpha = 1; c.fillStyle = '#171714'; c.fillRect(0, 0, W, H); }
+  }
+  var nombre = document.getElementById('nombre');
+  function ajustarNombre() {
+    if (!nombre) return;
+    var ancho = nombre.parentElement.clientWidth;
+    nombre.style.fontSize = '100px';
+    var w = nombre.getBoundingClientRect().width;
+    if (w > 0 && ancho > 0) nombre.style.fontSize = Math.max(72, Math.min(330, Math.floor(ancho / w * 100))) + 'px';
+  }
+  function todo(forzar) { ajustarNombre(); lienzos.forEach(function (cv) { pintar(cv, forzar); }); }
+  var semillas = leer('heison:semillas');
+  if (!semillas || typeof semillas !== 'object') semillas = {};
+  lienzos.forEach(function (cv) {
+    var s = parseInt(semillas[cv.dataset.portada], 10), et = cv.parentElement.querySelector('.semilla b');
+    if (s > 0 && s < 10000) { cv.dataset.semilla = String(s); if (et) et.textContent = ('000' + s).slice(-4); }
+  });
+  todo(true);
+  var cuadro = 0;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(cuadro);
+    cuadro = requestAnimationFrame(function () { todo(false); });
+  });
+  if (document.fonts) {
+    if (document.fonts.ready) document.fonts.ready.then(function () { todo(true); realinear(); });
+    if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', function () { todo(true); realinear(); });
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest ? ev.target.closest('.redibujar') : null;
+    if (!b) return;
+    var marco = b.closest('.portada'), cv = marco.querySelector('canvas'), s = 1 + Math.floor(Math.random() * 9999);
+    cv.dataset.semilla = String(s);
+    semillas[cv.dataset.portada] = s; guardar('heison:semillas', semillas);
+    marco.querySelector('.semilla b').textContent = ('000' + s).slice(-4);
+    pintar(cv, true);
+    cv.classList.remove('nueva'); void cv.offsetWidth; cv.classList.add('nueva');
+  });
+
+  /* ---------- Comodidades: memoria del navegador, fechas, atajos y avisos ---------- */
+  function leer(clave) { try { return JSON.parse(window.localStorage.getItem(clave)); } catch (e) { return null; } }
+  function guardar(clave, valor) { try { window.localStorage.setItem(clave, JSON.stringify(valor)); } catch (e) { /* sin memoria: todo sigue funcionando */ } }
+  function cada(selector, fn) { Array.prototype.forEach.call(document.querySelectorAll(selector), fn); }
+
+  // Tiempo transcurrido y etiqueta «Nuevo» durante 14 días
+  function diasDesde(iso) {
+    var p = String(iso || '').split('-'), f = new Date(+p[0], +p[1] - 1, +p[2]), h = new Date();
+    if (isNaN(f.getTime())) return null;
+    return Math.round((new Date(h.getFullYear(), h.getMonth(), h.getDate()) - f) / 864e5);
+  }
+  function hace(d) {
+    if (d === null) return '';
+    if (d <= 0) return 'hoy';
+    if (d === 1) return 'ayer';
+    if (d < 31) return 'hace ' + d + ' días';
+    if (d < 365) { var m = Math.round(d / 30.4); return m <= 1 ? 'hace 1 mes' : 'hace ' + m + ' meses'; }
+    var a = Math.floor(d / 365); return a <= 1 ? 'hace 1 año' : 'hace ' + a + ' años';
+  }
+  cada('.bitacora li', function (li) {
+    var t = li.querySelector('time'), h = li.querySelector('.hace');
+    if (t && h) h.textContent = hace(diasDesde(t.getAttribute('datetime')));
+  });
+  cada('[data-desde]', function (el) {
+    var d = diasDesde(el.getAttribute('data-desde'));
+    if (d !== null && d <= 14) el.hidden = false;
+  });
+
+  // Novedades que llegaron después de tu última visita
+  var filas = Array.prototype.slice.call(document.querySelectorAll('.bitacora li[data-n]'));
+  var ultima = filas.reduce(function (mx, li) { return Math.max(mx, parseInt(li.getAttribute('data-n'), 10) || 0); }, 0);
+  var vista = parseInt(leer('heison:novedades'), 10), nuevas = 0;
+  if (vista > 0 && vista < ultima) {
+    filas.forEach(function (li) { if ((parseInt(li.getAttribute('data-n'), 10) || 0) > vista) { li.classList.add('nueva'); nuevas++; } });
+    var est = document.getElementById('novedades-estado');
+    if (est) est.textContent = nuevas === 1 ? '1 nueva desde tu última visita' : nuevas + ' nuevas desde tu última visita';
+    cada('a[href="#novedades"]', function (a) { var c = document.createElement('span'); c.className = 'cuenta'; c.textContent = String(nuevas); c.setAttribute('aria-label', nuevas + ' sin ver'); a.appendChild(c); });
+    cada('#ir-a option[value="novedades"]', function (o) { o.textContent = 'Novedades (' + nuevas + (nuevas === 1 ? ' nueva)' : ' nuevas)'); });
+  }
+  var seccionNov = document.getElementById('novedades');
+  if (ultima && seccionNov && 'IntersectionObserver' in window) {
+    var ojo = new IntersectionObserver(function (es) {
+      if (es.some(function (e) { return e.isIntersecting; })) { guardar('heison:novedades', ultima); ojo.disconnect(); }
+    }, { threshold: .25 });
+    ojo.observe(seccionNov);
+  } else if (ultima) guardar('heison:novedades', ultima);
+
+  // Aviso breve en pantalla y copiar enlace
+  var aviso = document.getElementById('aviso'), relojAviso = 0;
+  function avisar(texto, ms) {
+    if (!aviso) return;
+    aviso.textContent = texto; aviso.classList.add('visible');
+    clearTimeout(relojAviso); relojAviso = setTimeout(function () { aviso.classList.remove('visible'); }, ms || 2800);
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest ? ev.target.closest('[data-copiar]') : null;
+    if (!b) return;
+    var url = b.getAttribute('data-copiar');
+    var falla = function () { avisar('No se pudo copiar. El enlace es ' + url.replace(/^https?:\/\//, ''), 9000); };
+    try { navigator.clipboard.writeText(url).then(function () { avisar('Enlace copiado'); }, falla); } catch (e) { falla(); }
+  });
+
+  // «Ir a»: salta a cualquier parte y, al bajar, indica dónde estás
+  var sel = document.getElementById('ir-a'), barra = document.querySelector('.atajo');
+  function destino(id) { return id === 'inicio' ? document.body : document.getElementById(id); }
+  function irA(id) {
+    var el = destino(id);
+    if (!el) return;
+    try { if (location.hash !== '#' + id) location.hash = id; } catch (e) { /* sin acceso a la dirección: se desplaza igual */ }
+    el.scrollIntoView({ block: 'start' });
+  }
+  if (sel) {
+    var ids = Array.prototype.map.call(sel.options, function (o) { return o.value; }), pendiente = false;
+    var ubicar = function () {
+      pendiente = false;
+      if (document.activeElement === sel) return;
+      var lim = (barra ? barra.getBoundingClientRect().bottom : 0) + 96, actual = ids[0], i, el;
+      for (i = 1; i < ids.length; i++) { el = destino(ids[i]); if (el && el.getBoundingClientRect().top <= lim) actual = ids[i]; }
+      if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4) actual = ids[ids.length - 1];
+      if (sel.value !== actual) sel.value = actual;
+    };
+    sel.addEventListener('change', function () { var id = sel.value; sel.blur(); irA(id); });
+    window.addEventListener('scroll', function () { if (!pendiente) { pendiente = true; requestAnimationFrame(ubicar); } }, { passive: true });
+    ubicar();
+  }
+
+  // Si la página se abre con un enlace directo (por ejemplo #boffbom), vuelve a cuadrar al terminar de cargar
+  var conDestino = (location.hash || '').length > 1, intentos = 0;
+  function realinear() {
+    if (!conDestino || intentos > 3) return;
+    intentos++;
+    var el = destino(location.hash.slice(1));
+    if (!el) return;
+    try { el.scrollIntoView({ block: 'start', behavior: 'instant' }); } catch (e) { el.scrollIntoView(); }
+  }
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (tipo) {
+    window.addEventListener(tipo, function () { conDestino = false; }, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>
