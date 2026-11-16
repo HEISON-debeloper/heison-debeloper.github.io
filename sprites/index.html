@@ -239,6 +239,7 @@ input[type=range]{width:100%;height:32px;accent-color:var(--accent);margin:0}
     <div class="strip scroll" id="strip"></div>
     <button class="ib sm" id="btnAddFrame" data-icon="plus" aria-label="Cuadro nuevo en blanco"></button>
     <button class="ib sm" id="btnDupFrame" data-icon="dup" aria-label="Duplicar cuadro"></button>
+    <button class="ib sm" id="btnTweenOpen" data-icon="tween" aria-label="Cuadros intermedios automáticos"></button>
     <button class="ib sm" id="btnDelFrame" data-icon="trash" aria-label="Eliminar cuadro"></button>
   </div>
 </div>
@@ -290,8 +291,9 @@ input[type=range]{width:100%;height:32px;accent-color:var(--accent);margin:0}
       <input type="range" id="expCols" min="1" max="1" step="1" value="1">
     </label>
     <button class="btn primary" id="btnSavePng">Guardar imagen PNG</button>
+    <button class="btn" id="btnSaveSvg">Guardar SVG (vector)</button>
     <button class="btn" id="btnSaveJson">Guardar copia de seguridad</button>
-    <p class="hint">Escala ×1 para usarla en un juego; más grande para compartirla. El PNG conserva la transparencia. En el iPhone se abre Compartir: elige «Guardar imagen» o «Guardar en Archivos».</p>
+    <p class="hint">Escala ×1 para usarla en un juego; más grande para compartirla. El PNG conserva la transparencia. El SVG guarda el dibujo como vectores: se agranda o achica a cualquier tamaño sin perder nitidez. En el iPhone se abre Compartir: elige «Guardar imagen» o «Guardar en Archivos».</p>
   </div>
 </section>
 
@@ -318,6 +320,13 @@ input[type=range]{width:100%;height:32px;accent-color:var(--accent);margin:0}
       <button class="btn" id="btnResize">Aplicar</button>
     </div>
     <p class="hint">El dibujo queda centrado. Máximo 128 × 128 píxeles.</p>
+    <h3>Escalar dibujo</h3>
+    <div class="chips" id="scChips"></div>
+    <label class="field">Porcentaje<input type="number" id="scPct" min="10" max="800" value="200" inputmode="numeric"></label>
+    <div class="seg wide" id="scWhere"><button data-w="0">Dentro del lienzo</button><button data-w="1">Todo el sprite</button></div>
+    <div class="seg wide" id="scEdge"><button data-e="0">Bordes pixelados</button><button data-e="1">Bordes suavizados</button></div>
+    <button class="btn" id="btnScale">Escalar</button>
+    <p class="hint">«Dentro del lienzo» agranda o achica la figura sobre su centro, en este cuadro o en todos según «Transformar». «Todo el sprite» también cambia el tamaño del lienzo. Al achicar se conserva el color dominante de cada bloque; el suavizado redondea esquinas al agrandar al 200 % o 400 %.</p>
     <h3>Animación</h3>
     <label class="field"><span>Velocidad: <b id="fpsVal">8</b> cuadros por segundo</span>
       <input type="range" id="inFps" min="1" max="24" step="1" value="8">
@@ -339,6 +348,25 @@ input[type=range]{width:100%;height:32px;accent-color:var(--accent);margin:0}
       <li>Elige «Agregar a Inicio».</li>
     </ol>
     <p class="hint" id="storeInfo"></p>
+  </div>
+</section>
+
+<section class="sheet" id="sheetTween" hidden aria-label="Cuadros intermedios">
+  <header><h2>Cuadros intermedios</h2><button class="ib" data-close data-icon="close" aria-label="Cerrar"></button></header>
+  <div class="body scroll">
+    <p class="hint" id="twInfo"></p>
+    <div class="preview" style="height:130px"><img id="twImg" alt="Vista previa: tu cuadro inicial, los intermedios y tu cuadro final"></div>
+    <div class="field"><span>Cuántos cuadros crear</span><div class="chips" id="twCount"></div></div>
+    <div class="field"><span>Cómo se calculan</span>
+      <div class="seg wide" id="twMode">
+        <button data-mode="morph">Forma y lugar</button><button data-mode="move">Solo mover</button><button data-mode="fade">Fundido</button>
+      </div>
+    </div>
+    <div class="field"><span>Ritmo</span>
+      <div class="seg wide" id="twEase"><button data-ease="0">Constante</button><button data-ease="1">Suave</button></div>
+    </div>
+    <button class="btn primary" id="btnTween">Crear cuadros</button>
+    <p class="hint">Dibuja la pose inicial en un cuadro y la final en el siguiente: el taller rellena los de en medio. «Forma y lugar» lleva la figura de la posición y el tamaño de un cuadro a los del otro y cambia de forma con un tramado de píxeles. «Solo mover» desplaza el primer dibujo hacia donde está el segundo. «Fundido» cambia de un dibujo al otro sin moverlo. Solo usa colores que ya están en tus cuadros, y se puede deshacer.</p>
   </div>
 </section>
 
@@ -368,8 +396,8 @@ input[type=range]{width:100%;height:32px;accent-color:var(--accent);margin:0}
 <script>
 (function () {
 'use strict';
-var DATA = {"pal":{"k":"#1a1423","q":"#3b3348","m":"#6b6578","n":"#a9a5b3","w":"#f4efe6","D":"#5e3023","d":"#a15a3c","s":"#d98f5f","S":"#f4c59a","T":"#3e2416","t":"#6e4426","c":"#9c6b3a","C":"#c99a5b","a":"#e8c170","A":"#f6e2a0","y":"#ffd23f","G":"#14342b","g":"#1f6b3a","v":"#3fa34d","V":"#8fd14f","U":"#0f2a4a","u":"#1b5e8a","b":"#2ba3c4","B":"#7fe0d8","x":"#b8ecf5","P":"#4a3a8c","p":"#8a6fd1","R":"#6e1a2b","r":"#c0392b","o":"#f2622e","O":"#ff9f43","f":"#f28ca8"},"palettes":[{"id":"isla","name":"Isla","colors":["#1a1423","#3b3348","#6b6578","#a9a5b3","#f4efe6","#5e3023","#a15a3c","#d98f5f","#f4c59a","#3e2416","#6e4426","#9c6b3a","#c99a5b","#e8c170","#f6e2a0","#ffd23f","#14342b","#1f6b3a","#3fa34d","#8fd14f","#0f2a4a","#1b5e8a","#2ba3c4","#7fe0d8","#b8ecf5","#4a3a8c","#8a6fd1","#6e1a2b","#c0392b","#f2622e","#ff9f43","#f28ca8"]},{"id":"basica","name":"Básica","colors":["#14121f","#4a4a5a","#9a9aa8","#ffffff","#d7263d","#f4792b","#ffd23f","#6fcf4a","#1f7a3d","#2bc4c4","#2f6fdb","#232a6b","#8a4fd1","#f27fb2","#7a4a2a","#e0b98a"]},{"id":"mono","name":"Monocromo","colors":["#1b2a1f","#3d6b45","#86b56a","#dff0c0"]},{"id":"grises","name":"Grises","colors":["#0e0e12","#2b2b33","#4a4a55","#6c6c78","#8f8f9b","#b3b3bd","#d8d8de","#ffffff"]}],"examples":[{"id":"naufrago","name":"Náufrago","w":16,"h":16,"fps":6,"frames":[["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdskksdk....","....kkk..kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kkk.ksdk....",".........kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdskksdk....","....kkk..kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdsk.kkk....","....kkk........."]]},{"id":"cangrejo","name":"Cangrejo","w":16,"h":16,"fps":4,"frames":[["................","................",".k...k....k...k.","kOk.kok..kok.kOk","kooOook..kooOook",".kroork..kroork.","..kkrk....krkk..","...krkkkkkkrk...","..kkoOOOOOOokk..",".kroowkookwoork.",".kroooooooooork.",".krrooorrooorrk.","..kkrrrrrrrrkk..",".k.kkkkkkkkkk.k.","k..k.k....k.k..k","................"],["................","................","................",".kk.kk....kk.kk.","kOokook..kookoOk",".kroork..kroork.","..kkrk....krkk..","...krkkkkkkrk...","..kkoOOOOOOokk..",".kroowkookwoork.",".kroooooooooork.",".krrooorrooorrk.","..kkrrrrrrrrkk..","..kkkkkkkkkkkk..",".k.k..k..k..k.k.","................"]]},{"id":"fogata","name":"Fogata","w":16,"h":16,"fps":8,"frames":[["................",".......RR.......","......RrrR.y....","......RooR......",".....RroorR.....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................","......RR........",".....RrrR.......","....ORooR.......","....RroorR......","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................",".....y.RR.......","......RrrR......","......RooR......",".....RroorO.....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................","........RR......",".......RrrR.....",".......RooR.y...","......RroorR....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."]]},{"id":"palmera","name":"Palmera","w":24,"h":32,"fps":8,"frames":[[".......GG...............","......GvvG.......GG.....","......GgVVG.....GvvG....",".......GgVG...GGVVgG....","........GgvG.GVVgggG....","...GGGGG.GVG.GVgGGG.....","..GVvVVvGGVVGVvGGGGGG...",".GvvggvvvGgvGvgGVVVvVG..","GvvgGGgggvGvvvvvvggvvVG.","GggGGGGVGgvggvvggGGggvvG","GgGGVVVvvvggggvvvVGGGgvG",".GGVvvgggVvggggvvvVG.GgG",".GVvggGGVctgtctgggvVGGgG","GVvgGGGVvtTcttTkGGgvvGG.","GvgG..GvvkkctTTk..GgVVG.","vvG..GvvgGktTtTk...GgvG.","vgG..GVgG..kctTk....GvvG","gG..GvvG...kctTk....GgvG","gG..GvgG...ktTTk.....GvG","G...GvG....kctTk.....GgG","...GvvG....kctTk......G.","...GggG....kctTk........","....GG.....ktTTk........","...........kctTk........","...........kctTk........","...........kctTk........","...........ktTTk........","...........kctTk........","..........kkctTk........",".........ktctTTk........",".........kttTTTk........","..........kkkkk........."]]},{"id":"cofre","name":"Cofre","w":16,"h":16,"fps":8,"frames":[["................","................","..kkkkkkkkkkkk..",".kCnCCCCCCCCnCk.","kcCnccccccccnCck","kccnccccccccncck","ktcmttttttttmctk","kkkkkkkyykkkkkkk","ktcmttkyykttmctk","ktcmtttkktttmctk","ktcmttttttttmctk","ktcmttttttttmctk","kTtmTTTTTTTTmtTk",".kkkkkkkkkkkkkk.","................","................"]]},{"id":"hacha","name":"Hacha de piedra","w":16,"h":16,"fps":8,"frames":[["................","................","......kkkk......","....kknnnnk.....","...knwnnnmmkkkk.","...knnnmmmqkctk.","....kmmqqqkctk..",".....kkkkkCCk...","........kctk....",".......kctk.....","......kctk......",".....kctk.......","....kctk........","...kctk.........","..kctk..........","...kk..........."]]},{"id":"pez","name":"Pez","w":16,"h":16,"fps":8,"frames":[["................","................","................",".....kkk........","...kkuuukk......",".kkbbbbbuukk.kk.","kbBBbbbbbbuukkuk","kBwkBbbbbbbuuubk","kBBBBbbbbbbuuubk","kxBBbbbbbbuukkuk",".kkxxxbbuukk.kk.","...kkkkkkk......","................","................","................","................"]]},{"id":"agua","name":"Agua (loseta)","w":16,"h":16,"fps":4,"frames":[["bbbbbbbbbbubbbbb","bBxBBbbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb","bbbbbbbbbbbubbbb","bbbbbbBxBBbbbbbb","bbbbbbbbuuubbbbb","BBbbbbbbbbbbbbbB","ubbbbbbbbbbbbbbb","bbbbbbbbbbbBxBBb","bbbbbbbbbbbbbuuu","bbbbBBBbbbbbbbbb","bbbbbubbbbbbbbbb","BxBBbbbbbbbbbbbb","bbuuubbbbbbbbbbb","bbbbbbbbbBBBbbbb"],["bbbbbbbbbbbubbbb","bbBxBBBbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb","bbbbbbbbbbbbubbb","bbbbbbbBxBBBbbbb","bbbbbbbbbuuubbbb","BBBbbbbbbbbbbbbb","bubbbbbbbbbbbbbb","BbbbbbbbbbbbBxBB","ubbbbbbbbbbbbbuu","bbbbbBBBbbbbbbbb","bbbbbbubbbbbbbbb","bBxBBBbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb"],["bbbbbbbbbbbbubbb","bbbBxBBBbbbbbbbb","bbbbbuuubbbbbbbb","bbbbbbbbbbbbBBBb","bbbbbbbbbbbbbubb","bbbbbbbbBxBBBbbb","bbbbbbbbbbuuubbb","bBBBbbbbbbbbbbbb","bbubbbbbbbbbbbbb","BBbbbbbbbbbbbBxB","uubbbbbbbbbbbbbu","bbbbbbBBBbbbbbbb","bbbbbbbubbbbbbbb","bbBxBBBbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb"],["bbbbbbbbbbbubbbb","bbBxBBbbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb","bbbbbbbbbbbbubbb","bbbbbbbBxBBbbbbb","bbbbbbbbbuuubbbb","BBBbbbbbbbbbbbbb","bubbbbbbbbbbbbbb","bbbbbbbbbbbbBxBB","ubbbbbbbbbbbbbuu","bbbbbBBBbbbbbbbb","bbbbbbubbbbbbbbb","bBxBBbbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb"]]},{"id":"arena","name":"Arena (loseta)","w":16,"h":16,"fps":8,"frames":[["AAAAAAAAAAAAAAAA","AAAAAAwaaAAAAaAA","AaAAAAAAAAAAAaaA","AAwAAAAAAAAAAAAA","AAAAAAAAAAaaAAAA","AAAwAAAAAAAAAAAA","AAAAAAAAAAAwAAAA","AAAaAAAAACAAAAAA","AAAAAAAAAaAAAAAA","AAAaaaAAAAAAAAAA","AAAAAAAAAAAAAAAA","AAAaaAAAAAAAAACA","AaaAAAAAAAAAAAaA","AAAAAAAAAAAAAAAA","AAAAAAAAAACAAAAA","AAAAAAAAAAaAAwAA"]]}],"icons":{"pencil":[".........###",".........##.",".......##...","......###...",".....###....","....###.....","...###......","...##.......",".##.........","##..........","#...........","............"],"eraser":["............",".....######.","....#....##.","...#....#.#.","..#....#..#.",".#....#..#..",".######.#...",".#....##....",".######.....","............",".##########.","............"],"fill":[".....#......","....###.....","...#.#.#....","..#..#..#...",".#...#...#..","#.........#.",".#########.#","..#######..#","...#####..##","....###...##",".....#......","............"],"picker":[".........##.","........####",".......#####","......#####.",".....#.###..","....#...#...","...#...#....","..#...#.....",".#...#......",".#..#.......","#.##........","##.........."],"line":["............",".........##.",".........##.","........#...",".......#....","......#.....",".....#......","....#.......","...#........",".##.........",".##.........","............"],"rect":["............","............",".##########.",".#........#.",".#........#.",".#........#.",".#........#.",".#........#.",".#........#.",".##########.","............","............"],"ellipse":["............","....####....","..##....##..","..#......#..",".#........#.",".#........#.",".#........#.",".#........#.","..#......#..","..##....##..","....####....","............"],"move":[".....##.....","....####....",".....##.....",".....##.....",".#...##...#.","############","############",".#...##...#.",".....##.....",".....##.....","....####....",".....##....."],"undo":["............","...#........","..##........",".#######....","..##....#...","...#.....#..",".........#..",".........#..","........#...","...#####....","............","............"],"more":["............","............","............","............","............",".##..##..##.",".##..##..##.","............","............","............","............","............"],"gallery":["............",".####..####.",".####..####.",".####..####.",".####..####.","............","............",".####..####.",".####..####.",".####..####.",".####..####.","............"],"play":["............","...#........","...###......","...#####....","...#######..","...########.","...########.","...#######..","...#####....","...###......","...#........","............"],"stop":["............","............","..########..","..########..","..########..","..########..","..########..","..########..","..########..","..########..","............","............"],"plus":["............",".....##.....",".....##.....",".....##.....",".....##.....",".##########.",".##########.",".....##.....",".....##.....",".....##.....",".....##.....","............"],"dup":["............","....#######.","....#.....#.",".#######..#.",".#.....#..#.",".#.....#..#.",".#.....#..#.",".#.....####.",".#.....#....",".#######....","............","............"],"trash":["............","....####....",".##########.","............","..########..","..#.#..#.#..","..#.#..#.#..","..#.#..#.#..","..#.#..#.#..","..#......#..","..########..","............"],"grid":["............","...#....#...","...#....#...",".##########.","...#....#...","...#....#...","...#....#...","...#....#...",".##########.","...#....#...","...#....#...","............"],"mirror":[".....##.....","............","...#.##.#...","..##....##..",".###.##.###.","####....####","####.##.####",".###....###.","..##.##.##..","...#....#...",".....##.....","............"],"onion":["............",".#.#.#.#....","............",".#..########","....#......#",".#..#......#","....#......#",".#..#......#","....#......#","....#......#","....########","............"],"fit":["............",".###....###.",".#........#.",".#........#.","............","............","............","............",".#........#.",".#........#.",".###....###.","............"],"close":["............",".##......##.","..##....##..","...##..##...","....####....",".....##.....",".....##.....","....####....","...##..##...","..##....##..",".##......##.","............"],"export":[".....##.....","....####....","...######...",".....##.....",".....##.....",".....##.....",".#...##...#.",".#........#.",".#........#.",".#........#.",".##########.","............"],"drop":[".....#......","....###.....","....###.....","...#####....","..#######...","..#######...",".#########..",".#########..",".#########..","..#######...","...#####....","............"],"redo":["............","........#...","........##..","....#######.","...#....##..","..#.....#...","..#.........","..#.........","...#........","....#####...","............","............"]}};
-var VERSION = '1.0';
+var DATA = {"pal":{"k":"#1a1423","q":"#3b3348","m":"#6b6578","n":"#a9a5b3","w":"#f4efe6","D":"#5e3023","d":"#a15a3c","s":"#d98f5f","S":"#f4c59a","T":"#3e2416","t":"#6e4426","c":"#9c6b3a","C":"#c99a5b","a":"#e8c170","A":"#f6e2a0","y":"#ffd23f","G":"#14342b","g":"#1f6b3a","v":"#3fa34d","V":"#8fd14f","U":"#0f2a4a","u":"#1b5e8a","b":"#2ba3c4","B":"#7fe0d8","x":"#b8ecf5","P":"#4a3a8c","p":"#8a6fd1","R":"#6e1a2b","r":"#c0392b","o":"#f2622e","O":"#ff9f43","f":"#f28ca8"},"palettes":[{"id":"isla","name":"Isla","colors":["#1a1423","#3b3348","#6b6578","#a9a5b3","#f4efe6","#5e3023","#a15a3c","#d98f5f","#f4c59a","#3e2416","#6e4426","#9c6b3a","#c99a5b","#e8c170","#f6e2a0","#ffd23f","#14342b","#1f6b3a","#3fa34d","#8fd14f","#0f2a4a","#1b5e8a","#2ba3c4","#7fe0d8","#b8ecf5","#4a3a8c","#8a6fd1","#6e1a2b","#c0392b","#f2622e","#ff9f43","#f28ca8"]},{"id":"basica","name":"Básica","colors":["#14121f","#4a4a5a","#9a9aa8","#ffffff","#d7263d","#f4792b","#ffd23f","#6fcf4a","#1f7a3d","#2bc4c4","#2f6fdb","#232a6b","#8a4fd1","#f27fb2","#7a4a2a","#e0b98a"]},{"id":"mono","name":"Monocromo","colors":["#1b2a1f","#3d6b45","#86b56a","#dff0c0"]},{"id":"grises","name":"Grises","colors":["#0e0e12","#2b2b33","#4a4a55","#6c6c78","#8f8f9b","#b3b3bd","#d8d8de","#ffffff"]}],"examples":[{"id":"naufrago","name":"Náufrago","w":16,"h":16,"fps":6,"frames":[["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdskksdk....","....kkk..kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kkk.ksdk....",".........kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdskksdk....","....kkk..kkk...."],["................",".....kkkkkk.....","....kTttttTk....","...kTttccttTk...","...kTttttttTk...","...kTsSSSSsTk...","...ksSkSSkSsk...","...kdsSSSSsdk...","....kTtddtTk....","...kkwTttTwkk...","..kswwwTTwwwsk..","..kskwwwwwwksk..","..kkknwwwwnkkk..","....kubbbbuk....","....kdsk.kkk....","....kkk........."]]},{"id":"cangrejo","name":"Cangrejo","w":16,"h":16,"fps":4,"frames":[["................","................",".k...k....k...k.","kOk.kok..kok.kOk","kooOook..kooOook",".kroork..kroork.","..kkrk....krkk..","...krkkkkkkrk...","..kkoOOOOOOokk..",".kroowkookwoork.",".kroooooooooork.",".krrooorrooorrk.","..kkrrrrrrrrkk..",".k.kkkkkkkkkk.k.","k..k.k....k.k..k","................"],["................","................","................",".kk.kk....kk.kk.","kOokook..kookoOk",".kroork..kroork.","..kkrk....krkk..","...krkkkkkkrk...","..kkoOOOOOOokk..",".kroowkookwoork.",".kroooooooooork.",".krrooorrooorrk.","..kkrrrrrrrrkk..","..kkkkkkkkkkkk..",".k.k..k..k..k.k.","................"]]},{"id":"fogata","name":"Fogata","w":16,"h":16,"fps":8,"frames":[["................",".......RR.......","......RrrR.y....","......RooR......",".....RroorR.....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................","......RR........",".....RrrR.......","....ORooR.......","....RroorR......","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................",".....y.RR.......","......RrrR......","......RooR......",".....RroorO.....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."],["................","........RR......",".......RrrR.....",".......RooR.y...","......RroorR....","....RroOOorR....","....RoOyyOoR....","...RroOyyOorR...","...RoOyyyyOoR...","...RoOywwyOoR...","...RroOyyOorR...","..kkRroOOorRkk..",".kctkkRrrRkktck.","kCctttkkkktttcCk","kcttTTTTTTTTttck",".kkkkkkkkkkkkkk."]]},{"id":"palmera","name":"Palmera","w":24,"h":32,"fps":8,"frames":[[".......GG...............","......GvvG.......GG.....","......GgVVG.....GvvG....",".......GgVG...GGVVgG....","........GgvG.GVVgggG....","...GGGGG.GVG.GVgGGG.....","..GVvVVvGGVVGVvGGGGGG...",".GvvggvvvGgvGvgGVVVvVG..","GvvgGGgggvGvvvvvvggvvVG.","GggGGGGVGgvggvvggGGggvvG","GgGGVVVvvvggggvvvVGGGgvG",".GGVvvgggVvggggvvvVG.GgG",".GVvggGGVctgtctgggvVGGgG","GVvgGGGVvtTcttTkGGgvvGG.","GvgG..GvvkkctTTk..GgVVG.","vvG..GvvgGktTtTk...GgvG.","vgG..GVgG..kctTk....GvvG","gG..GvvG...kctTk....GgvG","gG..GvgG...ktTTk.....GvG","G...GvG....kctTk.....GgG","...GvvG....kctTk......G.","...GggG....kctTk........","....GG.....ktTTk........","...........kctTk........","...........kctTk........","...........kctTk........","...........ktTTk........","...........kctTk........","..........kkctTk........",".........ktctTTk........",".........kttTTTk........","..........kkkkk........."]]},{"id":"cofre","name":"Cofre","w":16,"h":16,"fps":8,"frames":[["................","................","..kkkkkkkkkkkk..",".kCnCCCCCCCCnCk.","kcCnccccccccnCck","kccnccccccccncck","ktcmttttttttmctk","kkkkkkkyykkkkkkk","ktcmttkyykttmctk","ktcmtttkktttmctk","ktcmttttttttmctk","ktcmttttttttmctk","kTtmTTTTTTTTmtTk",".kkkkkkkkkkkkkk.","................","................"]]},{"id":"hacha","name":"Hacha de piedra","w":16,"h":16,"fps":8,"frames":[["................","................","......kkkk......","....kknnnnk.....","...knwnnnmmkkkk.","...knnnmmmqkctk.","....kmmqqqkctk..",".....kkkkkCCk...","........kctk....",".......kctk.....","......kctk......",".....kctk.......","....kctk........","...kctk.........","..kctk..........","...kk..........."]]},{"id":"pez","name":"Pez","w":16,"h":16,"fps":8,"frames":[["................","................","................",".....kkk........","...kkuuukk......",".kkbbbbbuukk.kk.","kbBBbbbbbbuukkuk","kBwkBbbbbbbuuubk","kBBBBbbbbbbuuubk","kxBBbbbbbbuukkuk",".kkxxxbbuukk.kk.","...kkkkkkk......","................","................","................","................"]]},{"id":"agua","name":"Agua (loseta)","w":16,"h":16,"fps":4,"frames":[["bbbbbbbbbbubbbbb","bBxBBbbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb","bbbbbbbbbbbubbbb","bbbbbbBxBBbbbbbb","bbbbbbbbuuubbbbb","BBbbbbbbbbbbbbbB","ubbbbbbbbbbbbbbb","bbbbbbbbbbbBxBBb","bbbbbbbbbbbbbuuu","bbbbBBBbbbbbbbbb","bbbbbubbbbbbbbbb","BxBBbbbbbbbbbbbb","bbuuubbbbbbbbbbb","bbbbbbbbbBBBbbbb"],["bbbbbbbbbbbubbbb","bbBxBBBbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb","bbbbbbbbbbbbubbb","bbbbbbbBxBBBbbbb","bbbbbbbbbuuubbbb","BBBbbbbbbbbbbbbb","bubbbbbbbbbbbbbb","BbbbbbbbbbbbBxBB","ubbbbbbbbbbbbbuu","bbbbbBBBbbbbbbbb","bbbbbbubbbbbbbbb","bBxBBBbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb"],["bbbbbbbbbbbbubbb","bbbBxBBBbbbbbbbb","bbbbbuuubbbbbbbb","bbbbbbbbbbbbBBBb","bbbbbbbbbbbbbubb","bbbbbbbbBxBBBbbb","bbbbbbbbbbuuubbb","bBBBbbbbbbbbbbbb","bbubbbbbbbbbbbbb","BBbbbbbbbbbbbBxB","uubbbbbbbbbbbbbu","bbbbbbBBBbbbbbbb","bbbbbbbubbbbbbbb","bbBxBBBbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb"],["bbbbbbbbbbbubbbb","bbBxBBbbbbbbbbbb","bbbbuuubbbbbbbbb","bbbbbbbbbbbBBBbb","bbbbbbbbbbbbubbb","bbbbbbbBxBBbbbbb","bbbbbbbbbuuubbbb","BBBbbbbbbbbbbbbb","bubbbbbbbbbbbbbb","bbbbbbbbbbbbBxBB","ubbbbbbbbbbbbbuu","bbbbbBBBbbbbbbbb","bbbbbbubbbbbbbbb","bBxBBbbbbbbbbbbb","bbbuuubbbbbbbbbb","bbbbbbbbbbBBBbbb"]]},{"id":"arena","name":"Arena (loseta)","w":16,"h":16,"fps":8,"frames":[["AAAAAAAAAAAAAAAA","AAAAAAwaaAAAAaAA","AaAAAAAAAAAAAaaA","AAwAAAAAAAAAAAAA","AAAAAAAAAAaaAAAA","AAAwAAAAAAAAAAAA","AAAAAAAAAAAwAAAA","AAAaAAAAACAAAAAA","AAAAAAAAAaAAAAAA","AAAaaaAAAAAAAAAA","AAAAAAAAAAAAAAAA","AAAaaAAAAAAAAACA","AaaAAAAAAAAAAAaA","AAAAAAAAAAAAAAAA","AAAAAAAAAACAAAAA","AAAAAAAAAAaAAwAA"]]}],"icons":{"pencil":[".........###",".........##.",".......##...","......###...",".....###....","....###.....","...###......","...##.......",".##.........","##..........","#...........","............"],"eraser":["............",".....######.","....#....##.","...#....#.#.","..#....#..#.",".#....#..#..",".######.#...",".#....##....",".######.....","............",".##########.","............"],"fill":[".....#......","....###.....","...#.#.#....","..#..#..#...",".#...#...#..","#.........#.",".#########.#","..#######..#","...#####..##","....###...##",".....#......","............"],"picker":[".........##.","........####",".......#####","......#####.",".....#.###..","....#...#...","...#...#....","..#...#.....",".#...#......",".#..#.......","#.##........","##.........."],"line":["............",".........##.",".........##.","........#...",".......#....","......#.....",".....#......","....#.......","...#........",".##.........",".##.........","............"],"rect":["............","............",".##########.",".#........#.",".#........#.",".#........#.",".#........#.",".#........#.",".#........#.",".##########.","............","............"],"ellipse":["............","....####....","..##....##..","..#......#..",".#........#.",".#........#.",".#........#.",".#........#.","..#......#..","..##....##..","....####....","............"],"move":[".....##.....","....####....",".....##.....",".....##.....",".#...##...#.","############","############",".#...##...#.",".....##.....",".....##.....","....####....",".....##....."],"undo":["............","...#........","..##........",".#######....","..##....#...","...#.....#..",".........#..",".........#..","........#...","...#####....","............","............"],"more":["............","............","............","............","............",".##..##..##.",".##..##..##.","............","............","............","............","............"],"gallery":["............",".####..####.",".####..####.",".####..####.",".####..####.","............","............",".####..####.",".####..####.",".####..####.",".####..####.","............"],"play":["............","...#........","...###......","...#####....","...#######..","...########.","...########.","...#######..","...#####....","...###......","...#........","............"],"stop":["............","............","..########..","..########..","..########..","..########..","..########..","..########..","..########..","..########..","............","............"],"plus":["............",".....##.....",".....##.....",".....##.....",".....##.....",".##########.",".##########.",".....##.....",".....##.....",".....##.....",".....##.....","............"],"dup":["............","....#######.","....#.....#.",".#######..#.",".#.....#..#.",".#.....#..#.",".#.....#..#.",".#.....####.",".#.....#....",".#######....","............","............"],"trash":["............","....####....",".##########.","............","..########..","..#.#..#.#..","..#.#..#.#..","..#.#..#.#..","..#.#..#.#..","..#......#..","..########..","............"],"grid":["............","...#....#...","...#....#...",".##########.","...#....#...","...#....#...","...#....#...","...#....#...",".##########.","...#....#...","...#....#...","............"],"mirror":[".....##.....","............","...#.##.#...","..##....##..",".###.##.###.","####....####","####.##.####",".###....###.","..##.##.##..","...#....#...",".....##.....","............"],"onion":["............",".#.#.#.#....","............",".#..########","....#......#",".#..#......#","....#......#",".#..#......#","....#......#","....#......#","....########","............"],"fit":["............",".###....###.",".#........#.",".#........#.","............","............","............","............",".#........#.",".#........#.",".###....###.","............"],"close":["............",".##......##.","..##....##..","...##..##...","....####....",".....##.....",".....##.....","....####....","...##..##...","..##....##..",".##......##.","............"],"export":[".....##.....","....####....","...######...",".....##.....",".....##.....",".....##.....",".#...##...#.",".#........#.",".#........#.",".#........#.",".##########.","............"],"drop":[".....#......","....###.....","....###.....","...#####....","..#######...","..#######...",".#########..",".#########..",".#########..","..#######...","...#####....","............"],"redo":["............","........#...","........##..","....#######.","...#....##..","..#.....#...","..#.........","..#.........","...#........","....#####...","............","............"],"tween":["............","............","............","####....####","#..#....####","#..#.##.####","#..#.##.####","#..#....####","####....####","............","............","............"]}};
+var VERSION = '1.1';
 var MAXDIM = 128, MAXFRAMES = 64, HISTORY = 80;
 
 function $(s, r) { return (r || document).querySelector(s); }
@@ -733,6 +761,134 @@ function transform(fn) {
   var before = snap();
   for (var i = 0; i < P.frames.length; i++) if (S.allFrames || i === S.cur) P.frames[i] = fn(P.frames[i]);
   commit(before);
+}
+
+/* ---------- escalar y cuadros intermedios ---------- */
+function bbox(b, w, h) {
+  var x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) if (b[(y * w + x) * 4 + 3]) {
+    if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+  }
+  return x1 < 0 ? null : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+}
+function crop(b, w, box) {
+  var out = newBuf(box.w, box.h);
+  for (var y = 0; y < box.h; y++) out.set(b.subarray(((box.y + y) * w + box.x) * 4, ((box.y + y) * w + box.x + box.w) * 4), y * box.w * 4);
+  return out;
+}
+function epx(b, w, h) {
+  var W = w * 2, out = newBuf(W, h * 2);
+  function at(x, y) { return (clamp(y, 0, h - 1) * w + clamp(x, 0, w - 1)) * 4; }
+  function eq(i, j) { return b[i] === b[j] && b[i + 1] === b[j + 1] && b[i + 2] === b[j + 2] && b[i + 3] === b[j + 3]; }
+  function put(i, x, y) { var j = (y * W + x) * 4; out[j] = b[i]; out[j + 1] = b[i + 1]; out[j + 2] = b[i + 2]; out[j + 3] = b[i + 3]; }
+  for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
+    var E = at(x, y), U = at(x, y - 1), L = at(x - 1, y), R = at(x + 1, y), D = at(x, y + 1);
+    put(eq(U, L) && !eq(U, R) && !eq(L, D) ? L : E, 2 * x, 2 * y);
+    put(eq(U, R) && !eq(U, L) && !eq(R, D) ? R : E, 2 * x + 1, 2 * y);
+    put(eq(L, D) && !eq(L, U) && !eq(D, R) ? L : E, 2 * x, 2 * y + 1);
+    put(eq(D, R) && !eq(L, D) && !eq(U, R) ? R : E, 2 * x + 1, 2 * y + 1);
+  }
+  return out;
+}
+function vote(src, sw, sbox, x0, y0, fx, fy) {
+  var xa = Math.floor(x0 + 1e-6), ya = Math.floor(y0 + 1e-6);
+  var xb = Math.min(sbox.x + sbox.w, Math.max(xa + 1, Math.ceil(x0 + fx - 1e-6)));
+  var yb = Math.min(sbox.y + sbox.h, Math.max(ya + 1, Math.ceil(y0 + fy - 1e-6)));
+  var cnt = {}, best = -1, bn = 0, op = 0, tot = 0;
+  for (var y = ya; y < yb; y++) for (var x = xa; x < xb; x++) {
+    var i = (y * sw + x) * 4; tot++;
+    if (!src[i + 3]) continue;
+    op++;
+    var k = (src[i] << 16) | (src[i + 1] << 8) | src[i + 2], c = (cnt[k] || 0) + 1; cnt[k] = c;
+    if (c > bn) { bn = c; best = i; }
+  }
+  return op * 3 >= tot ? best : -1;
+}
+function remapBox(src, sw, sbox, dw, dh, dbox) {
+  var out = newBuf(dw, dh), fx = sbox.w / dbox.w, fy = sbox.h / dbox.h, down = fx > 1.0001 || fy > 1.0001;
+  var ya = Math.max(0, dbox.y), yb = Math.min(dh, dbox.y + dbox.h), xa = Math.max(0, dbox.x), xb = Math.min(dw, dbox.x + dbox.w);
+  for (var y = ya; y < yb; y++) for (var x = xa; x < xb; x++) {
+    var i;
+    if (down) i = vote(src, sw, sbox, sbox.x + (x - dbox.x) * fx, sbox.y + (y - dbox.y) * fy, Math.max(1, fx), Math.max(1, fy));
+    else i = ((sbox.y + Math.min(sbox.h - 1, Math.floor((y - dbox.y + 0.5) * fy))) * sw + sbox.x + Math.min(sbox.w - 1, Math.floor((x - dbox.x + 0.5) * fx))) * 4;
+    if (i < 0) continue;
+    var j = (y * dw + x) * 4; out[j] = src[i]; out[j + 1] = src[i + 1]; out[j + 2] = src[i + 2]; out[j + 3] = src[i + 3];
+  }
+  return out;
+}
+function upsmooth(b, w, h, tw, th) {
+  while (w * 2 <= tw && h * 2 <= th) { b = epx(b, w, h); w *= 2; h *= 2; }
+  return { b: b, w: w, h: h };
+}
+function scaleWhole(b, ow, oh, nw, nh, smooth) {
+  var s = smooth ? upsmooth(b, ow, oh, nw, nh) : { b: b, w: ow, h: oh };
+  return remapBox(s.b, s.w, { x: 0, y: 0, w: s.w, h: s.h }, nw, nh, { x: 0, y: 0, w: nw, h: nh });
+}
+function scaleInside(b, f, smooth) {
+  var w = P.w, h = P.h, box = bbox(b, w, h);
+  if (!box) return b;
+  var nbw = Math.max(1, Math.round(box.w * f)), nbh = Math.max(1, Math.round(box.h * f));
+  var dbox = { x: Math.round(box.x + box.w / 2 - nbw / 2), y: Math.round(box.y + box.h / 2 - nbh / 2), w: nbw, h: nbh };
+  if (smooth) {
+    var s = upsmooth(crop(b, w, box), box.w, box.h, nbw, nbh);
+    return remapBox(s.b, s.w, { x: 0, y: 0, w: s.w, h: s.h }, w, h, dbox);
+  }
+  return remapBox(b, w, box, w, h, dbox);
+}
+function translated(src, dx, dy) {
+  var w = P.w, h = P.h, out = newBuf(w, h);
+  for (var y = 0; y < h; y++) {
+    var ny = y + dy; if (ny < 0 || ny >= h) continue;
+    for (var x = 0; x < w; x++) {
+      var nx = x + dx; if (nx < 0 || nx >= w) continue;
+      var i = (y * w + x) * 4, j = (ny * w + nx) * 4;
+      out[j] = src[i]; out[j + 1] = src[i + 1]; out[j + 2] = src[i + 2]; out[j + 3] = src[i + 3];
+    }
+  }
+  return out;
+}
+var BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+function tweenFrame(A, B, t, mode) {
+  var w = P.w, h = P.h, ba = bbox(A, w, h), bb = bbox(B, w, h), a2 = A, b2 = B;
+  if (mode !== 'fade' && ba && bb) {
+    var ax = ba.x + ba.w / 2, ay = ba.y + ba.h / 2, bx = bb.x + bb.w / 2, by = bb.y + bb.h / 2;
+    if (mode === 'move') return translated(A, Math.round((bx - ax) * t), Math.round((by - ay) * t));
+    var bw = Math.max(1, Math.round(ba.w + (bb.w - ba.w) * t)), bh = Math.max(1, Math.round(ba.h + (bb.h - ba.h) * t));
+    var box = { x: Math.round(ax + (bx - ax) * t - bw / 2), y: Math.round(ay + (by - ay) * t - bh / 2), w: bw, h: bh };
+    a2 = remapBox(A, w, ba, w, h, box); b2 = remapBox(B, w, bb, w, h, box);
+  }
+  var out = newBuf(w, h);
+  for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
+    var s = (BAYER[(y & 3) * 4 + (x & 3)] + 0.5) / 16 < t ? b2 : a2, i = (y * w + x) * 4;
+    out[i] = s[i]; out[i + 1] = s[i + 1]; out[i + 2] = s[i + 2]; out[i + 3] = s[i + 3];
+  }
+  return out;
+}
+function svgFor(sheet, scale, cols) {
+  var w = P.w, h = P.h, frames = sheet ? P.frames : [P.frames[S.cur]], n = frames.length, paths = {};
+  cols = sheet ? clamp(cols, 1, n) : 1;
+  var W = cols * w, H = Math.ceil(n / cols) * h;
+  frames.forEach(function (b, fi) {
+    var ox = (fi % cols) * w, oy = Math.floor(fi / cols) * h;
+    for (var y = 0; y < h; y++) {
+      var x = 0;
+      while (x < w) {
+        var i = (y * w + x) * 4;
+        if (!b[i + 3]) { x++; continue; }
+        var x2 = x + 1;
+        while (x2 < w) { var j = (y * w + x2) * 4; if (b[j] !== b[i] || b[j + 1] !== b[i + 1] || b[j + 2] !== b[i + 2] || b[j + 3] !== b[i + 3]) break; x2++; }
+        var k = rgbToHex(b[i], b[i + 1], b[i + 2]) + (b[i + 3] < 255 ? '/' + (b[i + 3] / 255).toFixed(3) : '');
+        (paths[k] = paths[k] || []).push('M' + (ox + x) + ' ' + (oy + y) + 'h' + (x2 - x) + 'v1h-' + (x2 - x) + 'z');
+        x = x2;
+      }
+    }
+  });
+  var body = Object.keys(paths).map(function (k) {
+    var p = k.split('/');
+    return '<path fill="' + p[0] + '"' + (p[1] ? ' fill-opacity="' + p[1] + '"' : '') + ' d="' + paths[k].join('') + '"/>';
+  }).join('\n');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + W * scale + '" height="' + H * scale +
+    '" viewBox="0 0 ' + W + ' ' + H + '" shape-rendering="crispEdges">\n' + body + '\n</svg>\n';
 }
 
 /* ---------- vista ---------- */
@@ -1330,6 +1486,11 @@ $('#btnSavePng').addEventListener('click', function () {
     if (r === 'fail') toast('Mantén presionada la vista previa para guardarla');
   });
 });
+$('#btnSaveSvg').addEventListener('click', function () {
+  var n = P.frames.length, sheet = X.mode === 'sheet' && n > 1;
+  var svg = svgFor(sheet, X.scale, sheet ? X.cols : 1);
+  saveBlob(new Blob([svg], { type: 'image/svg+xml' }), X.name.replace(/\.png$/, '.svg'), 'image/svg+xml');
+});
 $('#btnSaveJson').addEventListener('click', function () {
   var blob = new Blob([JSON.stringify({ app: 'taller-sprites', v: 1, project: toRecord() })], { type: 'application/json' });
   saveBlob(blob, slug(P.name) + '.sprite.json', 'application/json');
@@ -1339,6 +1500,7 @@ $('#btnSaveJson').addEventListener('click', function () {
 function openMore() {
   $('#inW').value = P.w; $('#inH').value = P.h; $('#inFps').value = P.fps; $('#fpsVal').textContent = P.fps;
   $('#btnRot').disabled = P.w !== P.h;
+  renderScale();
   $$('#segBg button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-bg') === S.bg)); });
   var m = Store.mode();
   $('#storeInfo').textContent = (m === 'mem'
@@ -1385,6 +1547,92 @@ $$('#segBg button').forEach(function (b) {
     $$('#segBg button').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
     savePrefs(); requestRender();
   });
+});
+
+/* ---------- escalar: interfaz ---------- */
+var SC = { pct: 200, whole: false, smooth: false };
+function renderScale() {
+  var el = $('#scChips'); el.textContent = '';
+  [25, 50, 75, 150, 200, 300, 400].forEach(function (p) {
+    var b = document.createElement('button'); b.className = 'chip'; b.textContent = p + ' %';
+    b.setAttribute('aria-pressed', String(SC.pct === p));
+    b.onclick = function () { SC.pct = p; $('#scPct').value = p; renderScale(); };
+    el.appendChild(b);
+  });
+  $$('#scWhere button').forEach(function (b) { b.setAttribute('aria-pressed', String((b.getAttribute('data-w') === '1') === SC.whole)); });
+  $$('#scEdge button').forEach(function (b) { b.setAttribute('aria-pressed', String((b.getAttribute('data-e') === '1') === SC.smooth)); });
+}
+$('#scPct').addEventListener('input', function () { SC.pct = parseInt(this.value, 10) || 100; renderScale(); });
+$$('#scWhere button').forEach(function (b) { b.addEventListener('click', function () { SC.whole = b.getAttribute('data-w') === '1'; renderScale(); }); });
+$$('#scEdge button').forEach(function (b) { b.addEventListener('click', function () { SC.smooth = b.getAttribute('data-e') === '1'; renderScale(); }); });
+$('#btnScale').addEventListener('click', function () {
+  if (stroke) return;
+  var pct = clamp(parseInt($('#scPct').value, 10) || 100, 10, 800); $('#scPct').value = pct; SC.pct = pct;
+  if (pct === 100) return;
+  var f = pct / 100, smooth = SC.smooth && f > 1;
+  if (SC.whole) {
+    var nw = clamp(Math.round(P.w * f), 1, MAXDIM), nh = clamp(Math.round(P.h * f), 1, MAXDIM);
+    if (nw === P.w && nh === P.h) { toast('El sprite ya está en el tamaño máximo'); return; }
+    stopPlay();
+    var before = snap(), ow = P.w, oh = P.h;
+    P.frames = P.frames.map(function (b) { return scaleWhole(b, ow, oh, nw, nh, smooth); });
+    P.w = nw; P.h = nh; sized(); commit(before);
+    $('#inW').value = nw; $('#inH').value = nh; $('#btnRot').disabled = nw !== nh;
+    toast('Sprite de ' + nw + ' × ' + nh + (Math.round(ow * f) > MAXDIM || Math.round(oh * f) > MAXDIM ? ' (máximo 128)' : ''));
+  } else {
+    transform(function (b) { return scaleInside(b, f, smooth); });
+    toast('Dibujo al ' + pct + ' %');
+  }
+});
+
+/* ---------- cuadros intermedios: interfaz ---------- */
+var TW = { n: 3, mode: 'morph', ease: 0 };
+function twPair() { return [S.cur, (S.cur + 1) % P.frames.length]; }
+function twFrames() {
+  var pr = twPair(), A = P.frames[pr[0]], B = P.frames[pr[1]], out = [];
+  for (var k = 1; k <= TW.n; k++) {
+    var t = k / (TW.n + 1); if (TW.ease) t = t * t * (3 - 2 * t);
+    out.push(tweenFrame(A, B, t, TW.mode));
+  }
+  return out;
+}
+function renderTween() {
+  var pr = twPair(), room = MAXFRAMES - P.frames.length;
+  TW.n = clamp(TW.n, 1, Math.max(1, Math.min(8, room)));
+  var el = $('#twCount'); el.textContent = '';
+  for (var k = 1; k <= Math.min(8, room); k++) (function (k) {
+    var b = document.createElement('button'); b.className = 'chip'; b.textContent = String(k);
+    b.setAttribute('aria-pressed', String(TW.n === k)); b.setAttribute('aria-label', plural(k, 'cuadro', 'cuadros'));
+    b.onclick = function () { TW.n = k; renderTween(); };
+    el.appendChild(b);
+  })(k);
+  $$('#twMode button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === TW.mode)); });
+  $$('#twEase button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-ease') === TW.ease)); });
+  $('#twInfo').textContent = 'Del cuadro ' + (pr[0] + 1) + ' al cuadro ' + (pr[1] + 1) +
+    (pr[1] === 0 ? ', de vuelta al inicio para una animación en bucle.' : '.') + ' Para elegir otros, cierra y toca el cuadro inicial.';
+  var seq = [P.frames[pr[0]]].concat(twFrames(), [P.frames[pr[1]]]);
+  var s = Math.max(1, Math.floor(96 / P.h)), g = s * 2, c = document.createElement('canvas');
+  c.width = seq.length * P.w * s + (seq.length - 1) * g; c.height = P.h * s;
+  var x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+  var t = document.createElement('canvas'); t.width = P.w; t.height = P.h; var tx = t.getContext('2d');
+  seq.forEach(function (b, i) { tx.clearRect(0, 0, P.w, P.h); tx.putImageData(new ImageData(b, P.w, P.h), 0, 0); x.drawImage(t, i * (P.w * s + g), 0, P.w * s, P.h * s); });
+  $('#twImg').src = c.toDataURL('image/png');
+  $('#btnTween').textContent = 'Crear ' + plural(TW.n, 'cuadro', 'cuadros');
+}
+$('#btnTweenOpen').addEventListener('click', function () {
+  if (stroke) return;
+  if (P.frames.length < 2) { toast('Duplica el cuadro, cambia la copia y vuelve aquí'); return; }
+  if (P.frames.length >= MAXFRAMES) { toast('Máximo ' + MAXFRAMES + ' cuadros por sprite'); return; }
+  stopPlay(); renderTween(); openSheet('sheetTween');
+});
+$$('#twMode button').forEach(function (b) { b.addEventListener('click', function () { TW.mode = b.getAttribute('data-mode'); renderTween(); }); });
+$$('#twEase button').forEach(function (b) { b.addEventListener('click', function () { TW.ease = +b.getAttribute('data-ease'); renderTween(); }); });
+$('#btnTween').addEventListener('click', function () {
+  if (stroke) return;
+  var before = snap(), fr = twFrames();
+  Array.prototype.splice.apply(P.frames, [S.cur + 1, 0].concat(fr));
+  commit(before); closeSheets();
+  toast(plural(fr.length, 'cuadro creado', 'cuadros creados') + '. Toca ▶ para verlo');
 });
 
 /* ---------- paleta ---------- */
@@ -1505,6 +1753,7 @@ function start() {
 }
 window.__taller = {
   state: S, store: Store, project: function () { return P; }, flush: flushSave,
+  svg: function (sheet, scale, cols) { return svgFor(sheet, scale, cols); },
   exportURL: function (sheet, scale, cols) { return exportCanvas(sheet, scale, cols).toDataURL('image/png'); }
 };
 start().catch(function (err) {
