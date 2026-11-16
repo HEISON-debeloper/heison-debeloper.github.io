@@ -1,5 +1,5 @@
 /* Taller de Sprites: funciona sin conexión. Sirve desde caché y se actualiza en segundo plano. */
-const CACHE = 'taller-sprites-1.1';
+const CACHE = 'taller-sprites-1.1.1';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
