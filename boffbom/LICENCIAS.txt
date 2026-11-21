@@ -12,7 +12,9 @@ MÚSICA
 VOCES
 - Rachas en inglés: "Announcer kill sounds", de TripleSnail (proyecto Arkhados). CC BY 3.0
   (https://creativecommons.org/licenses/by/3.0/). https://opengameart.org/content/announcer-kill-sounds
-- Mapas y narrador en español: generadas con Piper (voz es_MX "ald", conjunto de datos bajo Unlicense) y procesadas.
+- Narrador en español (rachas, «¡A pelear!», victoria y derrota): voz «Murdock», generada con ElevenLabs
+  (elevenlabs.io) y procesada.
+- Nombres de mapas y avisos de recompensas: generados con Piper (voz es_MX "ald", conjunto de datos bajo Unlicense) y procesados.
 
 EFECTOS DE SONIDO
 - Disparos: The Free Firearm Sound Library. CC0 1.0.
