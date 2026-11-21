@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>BoffBom</title>
+<!doctype html><html lang="es" translate="no" class="notranslate"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="BoffBom"><meta name="theme-color" content="#0e0b18"><meta name="description" content="BoffBom: shooter 2D de hormigas con jetpack, 34 armas y bombas. Juega solo o con amigos, en línea o en la misma wifi."><meta property="og:title" content="BoffBom"><meta property="og:description" content="Hormigas con jetpack, 34 armas y bombas. Juega solo o con amigos."><meta property="og:type" content="website"><meta property="og:image" content="icon.png"><link rel="icon" type="image/png" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><link rel="manifest" href="manifest.webmanifest"><style>html,body{margin:0;height:100%;background:#0e0b18}</style><script>window.BOFFBOM_SW=1</script></head><body><title>BoffBom</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>/* Tipografías incluidas en el archivo (se ven igual sin internet), bajo SIL Open Font License 1.1 (https://openfontlicense.org):
    Russo One — Copyright (c) 2011-2012, Jovanny Lemonad (jovanny.ru), with Reserved Font Name "Russo". Sin modificar.
@@ -25,6 +24,9 @@ html,body{height:100%;margin:0;overflow:hidden;background:var(--night);color:var
 input{-webkit-user-select:text;user-select:text}
 #g{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none}
+html:not(.forceLand) body{position:fixed;inset:0;width:var(--vw,100vw);height:var(--vh,100vh)}
+/* Menús: llenan el ancho en celulares y tabletas; en monitores grandes se agrandan con la pantalla */
+.mcard{max-width:min(1180px,100%)!important}.touchui .card{max-width:100%!important}.screen>.card{zoom:var(--mz,1)}
 .hud{position:fixed;pointer-events:none;font-size:13px;font-weight:700;letter-spacing:.04em}
 #hudL{top:calc(10px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));
   display:grid;gap:5px;background:var(--panel);padding:9px 11px;border-radius:6px;border:1px solid var(--line);width:190px}
@@ -92,7 +94,7 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,9vw,68px);lin
 .joinrow{display:grid;grid-template-columns:1fr auto;gap:8px}.joinrow input{min-width:0}.joinrow .btn{font-size:16px;padding:10px 16px}
 .seg{display:inline-flex;gap:4px;flex-wrap:wrap}
 .lbt{width:100%;border-collapse:collapse;font-size:12px;text-align:left}.lbt th{color:var(--muted);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:4px 6px;border-bottom:1px solid var(--line)}.lbt td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.05)}.lbt td.n{text-align:right;font-variant-numeric:tabular-nums}.lbt tr.me td{color:var(--ember);font-weight:700}.lbt th.n{text-align:right}
-html.forceLand body{position:fixed;top:0;left:100vw;width:100vh;height:100vw;transform:rotate(90deg);transform-origin:top left;overflow:hidden}
+html.forceLand body{position:fixed;top:0;left:var(--vw,100vw);width:var(--vh,100vh);height:var(--vw,100vw);transform:rotate(90deg);transform-origin:top left;overflow:hidden}
 html.forceLand{overflow:hidden}
 #apkBar{position:fixed;z-index:60;left:50%;transform:translateX(-50%);top:8px;display:flex;align-items:center;gap:10px;background:rgba(14,11,24,.94);border:1px solid var(--ember);border-radius:10px;padding:8px 10px;font-size:12px;max-width:calc(100vw - 24px)}
 #apkBar a{background:var(--ember);color:var(--night);font-weight:700;padding:6px 12px;border-radius:8px;text-decoration:none;white-space:nowrap}#apkBar button{background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer}
@@ -219,6 +221,27 @@ body.touchui #audiobar button{padding:3px 9px;font-size:9px}
   #pause .card>.btn,#pause .card>#saverBtn{grid-column:auto;font-size:15px;padding:8px 10px}#pause .card>p.small{margin:0}#pauseOpts button{padding:4px 10px;font-size:11px}}
 @media (max-height:430px){#hudL{transform:scale(.82);transform-origin:top left}#hudR{transform:scale(.85);transform-origin:top right}#feed{display:none}}
 #audiobar #mute,#pauseOpts #mute{position:static;transform:none}
+/* ---------- Aspecto de juego, no de página web ----------
+   El menú ocupa la pantalla fija: arriba el título y las pestañas, abajo el panel. Nada de la pantalla se desplaza;
+   solo el contenido del panel, sin barras de desplazamiento. Sin selección de texto, sin menú de pulsación larga,
+   sin zoom con dos dedos ni con doble toque, sin enlaces subrayados. */
+*{-webkit-tap-highlight-color:transparent}
+*::-webkit-scrollbar{display:none;width:0;height:0}
+*{scrollbar-width:none}
+button,.btn,.diffbtn,[role=tab]{touch-action:manipulation;cursor:pointer}
+body,.screen{cursor:default}
+img,canvas{-webkit-user-drag:none;user-drag:none}
+#start{overflow:hidden!important;place-items:stretch center!important;padding-block:max(10px,env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-bottom,0px))!important}
+#start>.mcard{display:flex!important;flex-direction:column;height:100%;min-height:0;overflow:hidden}
+#start>.mcard>.mtop,#start>.mcard>.tabs{flex:none}
+#start>.mcard>.tabs{position:relative;top:0!important}
+#start .tabp:not([hidden]){flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;align-content:start;padding-bottom:6px;mask-image:linear-gradient(180deg,#000 calc(100% - 18px),transparent)}
+.subnav{display:flex;gap:6px}
+.subnav button{flex:1;font:700 14px var(--body);color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:8px 6px}
+.subnav button[aria-selected=true]{color:var(--night);background:#ffc94a;border-color:#ffc94a}
+.linkbtn{text-decoration:none!important;background:rgba(255,122,47,.16)!important;border:1px solid var(--ember)!important;border-radius:8px!important;padding:3px 10px!important}
+@media (max-height:430px){.brand .tag{display:none}.mtop .pcard{padding:4px 8px}.mtop .pcard canvas{width:36px;height:36px}.subnav button{padding:5px 4px;font-size:13px}}
+
 #hudL,#hudR{zoom:var(--hs,1)}
 #audiobar button{background:rgba(14,11,24,.45);color:var(--muted);border:1px solid var(--line);border-radius:14px;padding:calc(3px*var(--hs,1)) calc(9px*var(--hs,1));font:700 calc(9px*var(--hs,1)) var(--body);letter-spacing:.06em;cursor:pointer;white-space:nowrap}
 #audiobar button:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
@@ -446,10 +469,15 @@ const cv=document.getElementById('g');let ctx=cv.getContext('2d');
 const MOBILE=(('ontouchstart' in window)||navigator.maxTouchPoints>0)&&(!window.matchMedia||matchMedia('(pointer:coarse)').matches);
 let W=0,H=0,DPR=1,Q=2,HS=1; // HS: escala del HUD (1 en celulares; hasta 2 en monitores grandes)
 const skyC=document.createElement('canvas'),skyX=skyC.getContext('2d');
+/* Tamaño visible real (barras del navegador, iframes, teclado): se usa en lugar de 100vw/100vh */
+function fitViewport(){const v=window.visualViewport,w=Math.round(v?v.width:innerWidth),h=Math.round(v?v.height:innerHeight),st=document.documentElement.style;st.setProperty('--vw',w+'px');st.setProperty('--vh',h+'px');return [w,h]}
+if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(resize,30));
 function resize(){
+  fitViewport();
   if(typeof checkOrient==='function')checkOrient();
   DPR=Math.min((MOBILE?[1,1,1.25]:[1,1.25,1.5])[Q],window.devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
   HS=MOBILE?1:Math.max(1,Math.min(2,Math.min(W/1000,H/600)));document.documentElement.style.setProperty('--hs',HS.toFixed(3));
+  {const z=MOBILE?1:Math.max(1,Math.min(1.6,Math.min(W/1150,H/720)));document.documentElement.style.setProperty('--mz',z.toFixed(3))}
   rebuildSky();
   U=Math.max(.62,Math.min(1.15,Math.min(W,H)/390));STK_R=68*U;STK_JET=Math.min(110*U,H*.36);
 }
@@ -1467,8 +1495,9 @@ function peerRoomAPI(){return{peers:()=>[],join:name=>new Promise((resolve,rejec
    Cada cambio publicado sube el número: MAYOR.MENOR.PARCHE (mayor = cambia la red o las reglas; menor = contenido nuevo; parche = arreglos).
    En línea, cada jugador manda su versión: si no coincide, se avisa, porque versiones distintas pueden desincronizarse. */
 try{const de=document.documentElement;de.lang='es';de.setAttribute('translate','no');de.classList.add('notranslate')}catch(e){}
-const VERSION='1.9.0';
+const VERSION='1.9.1';
 const CHANGELOG=[
+ ['1.9.1','20 nov 2026',['La pantalla se ajusta sola al tamaño visible real: el juego y los menús llenan toda la pantalla en celular (vertical u horizontal), tableta y PC','En monitores grandes los menús se agrandan con la pantalla','Menú con aspecto de juego: pantalla fija sin desplazar la página, Jugar dividido en Partida, Mapa y Con amigos, y sin gestos de navegador (zoom, pulsación larga, selección)','Con el celular en vertical el juego se ve igual que en horizontal','App de Android: se actualiza sola. Baja la versión nueva del juego en segundo plano y te avisa en el menú para aplicarla']],
  ['1.9.0','15 nov 2026',['Versión de lanzamiento: revisión completa del juego, con partidas automáticas de prueba en todos los mapas y modos','Nueva app para PC (Windows y Linux): un solo archivo, sin instalar nada, con partidas en red local igual que la de Android','App de Android al día para Android 14, 15 y 16: botón «atrás» que cierra menús, y pausa y silencio al salir de la app','Mando: juega con control de Xbox, PlayStation o genérico, con vibración','Volumen separado para efectos y música, y el juego se calla y se pausa solo cuando sales de la app','En PC la interfaz se agranda sola en pantallas grandes; Esc pausa y «Continuar» vuelve a la pantalla completa','Arreglado un congelamiento poco frecuente en partidas con bots: dos bots juntos y casi sin balas podían quedarse pasándose armas sin fin','Red de seguridad: si algo falla durante un cuadro, el juego sigue en vez de quedarse congelado','En línea: quien crea la sala es siempre el anfitrión; Juego de armas avanza bien contra jugadores de otras pantallas; el final por tiempo es igual para todos','El tutorial ya no hereda el modo ni los modificadores, y al salir de una sala recuperas tus propias reglas','Letras incluidas en el juego (se ven igual sin internet) y, en la web, el juego abre sin conexión después de la primera visita','Explosión, cohete y latido con sonido nuevo; créditos y aviso de privacidad completos en Ajustes']],
  ['1.8.2','15 nov 2026',['El mapa ahora es aleatorio por defecto al iniciar una partida (puedes elegir uno fijo en la lista de mapas)']],
  ['1.8.1','15 nov 2026',['Mapas con mucho más detalle sin costo extra por cuadro: capas de roca, piedras, raíces, fósiles, cristales que brillan, tuberías, óxido, musgo, flores y piedritas en la superficie, telarañas, hongos luminosos y charcos en las cuevas']],
@@ -2231,14 +2260,14 @@ let forceLand=false;
 /* Se decide solo cuando la orientación lleva 0,6 s estable: así no se gira de un lado a otro mientras el iPhone rota */
 let orientWant=null,orientT=0;
 function isPortrait(){const o=(screen.orientation&&screen.orientation.type)||'';if(o)return o.startsWith('portrait');if(typeof window.orientation==='number')return window.orientation===0||window.orientation===180;return innerHeight>innerWidth*1.05}
-function checkOrient(){const port=IS_TOUCH_UI()&&isPortrait()&&innerHeight>innerWidth;
+function checkOrient(){const vv=window.visualViewport,port=IS_TOUCH_UI()&&isPortrait()&&(vv?vv.height>vv.width:innerHeight>innerWidth);
   if(port===forceLand){orientWant=null;return}
   if(orientWant!==port){orientWant=port;orientT=performance.now();return}
   if(performance.now()-orientT<600)return;
-  orientWant=null;forceLand=port;document.documentElement.classList.toggle('forceLand',port);setTimeout(resize,30)}
+  orientWant=null;forceLand=port;document.documentElement.classList.toggle('forceLand',port);if(window.boffRotMedia)window.boffRotMedia();setTimeout(resize,30)}
 setInterval(()=>{if(orientWant!==null)checkOrient()},150);
 function PX(e){return forceLand?e.clientY:e.clientX}
-function PY(e){return forceLand?innerWidth-e.clientX:e.clientY}
+function PY(e){return forceLand?(window.visualViewport?visualViewport.width:innerWidth)-e.clientX:e.clientY}
 function IS_TOUCH_UI(){return ('ontouchstart' in window)||navigator.maxTouchPoints>0}
 setTimeout(()=>{if(IS_TOUCH_UI()&&matchMedia('(pointer:coarse)').matches){document.body.classList.add('touchui');for(const id of ['mute','music','voice','lang','fsBtn'])$('pauseOpts').append($(id))}},0);const STK_FIRE=.95,lookT={x:0,y:0},look={x:0,y:0};
 const probe=document.createElement('div');probe.style.cssText='position:fixed;visibility:hidden;pointer-events:none;padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(probe);
@@ -3300,7 +3329,7 @@ $('tutPlay').addEventListener('click',()=>{try{localStorage.setItem('mb-tut','1'
 $('tutorial').addEventListener('click',startTutorial);
 try{if(!localStorage.getItem('mb-tut')&&!localStorage.getItem('mb-played'))$('tutHint').hidden=false}catch(e){}
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-const netStatus=t=>{$('netStatus').textContent=t};
+const netStatus=t=>{$('netStatus').textContent=t;/* el aviso se ve: si el menú está en otra parte, se pasa a «Con amigos» */try{if(window.boffSub&&!$('start').hidden&&$('netStatus').offsetParent===null)window.boffSub('amigos')}catch(e){}};
 async function startOnline(lanUrl){
   tutRestore();saveRules();
   LAN_URL=typeof lanUrl==='string'?lanUrl:null;
@@ -3338,6 +3367,51 @@ const HOSTAPP=(()=>{
 /* Versión web: tras la primera visita con internet, el juego abre también sin conexión. Solo se activa en la copia
    del sitio web, que es la única que trae sw.js (la marca window.BOFFBOM_SW la pone el compilador en esa copia). */
 try{if(window.BOFFBOM_SW&&!HOSTAPP&&'serviceWorker' in navigator)addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(()=>{const n=$('offNote');if(n)n.hidden=false}).catch(()=>{})})}catch(e){}
+
+/* Pantalla girada por software (celular en vertical): el navegador sigue creyendo que la pantalla es vertical y
+   aplicaría las reglas de pantalla angosta. Aquí cada regla de tamaño (@media max-width / max-height) se evalúa con
+   las medidas giradas: las originales valen solo sin giro y una copia, marcada con html.forceLand, vale con giro. */
+(function(){const MR=[];const pre=(sel,p)=>sel.split(',').map(x=>p+x.trim()).join(',');
+  for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules}catch(e){continue}
+    for(const r of rs){if(!(r instanceof CSSMediaRule))continue;const m=/^\(\s*max-(width|height)\s*:\s*(\d+)px\s*\)$/.exec(r.conditionText||r.media.mediaText);if(!m)continue;
+      const inner=[];for(const x of r.cssRules){if(x.selectorText){inner.push(pre(x.selectorText,'html.forceLand ')+'{'+x.style.cssText+'}');x.selectorText=pre(x.selectorText,'html:not(.forceLand) ')}}
+      MR.push({k:m[1],v:+m[2],css:inner.join('\n')})}}
+  const st=document.createElement('style');st.id='rotMedia';document.head.appendChild(st);let last='';
+  window.boffRotMedia=()=>{let css='';if(document.documentElement.classList.contains('forceLand')){const v=window.visualViewport,w=v?v.height:innerHeight,h=v?v.width:innerWidth;
+      for(const r of MR)if((r.k==='width'?w:h)<=r.v)css+=r.css+'\n'}
+    if(css!==last){st.textContent=css;last=css}};
+  window.boffRotMedia();addEventListener('resize',()=>setTimeout(window.boffRotMedia,40));setInterval(window.boffRotMedia,700)})();
+/* Sin gestos de navegador: pulsación larga, arrastrar imágenes, zoom con dos dedos o doble toque. */
+(function(){const ed=e=>e.target&&e.target.closest&&e.target.closest('input,textarea,select');
+  addEventListener('contextmenu',e=>{if(!ed(e))e.preventDefault()});
+  addEventListener('dragstart',e=>e.preventDefault());
+  for(const ev of ['gesturestart','gesturechange'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
+  document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
+  let lastT=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastT<300&&!ed(e))e.preventDefault();lastT=n},{passive:false});
+  addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault()},{passive:false});
+  addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&['+','-','=','0'].includes(e.key))e.preventDefault()});
+})();
+/* Pestaña Jugar dividida en tres partes, como el menú de un juego: Partida · Mapa · Con amigos. */
+(function(){const tp=$('tab-jugar');if(!tp)return;
+  const g={partida:[tp.querySelector('.setbox.wide'),tp.querySelector('.setgrid')],mapa:[tp.querySelector('.maps')],amigos:[tp.querySelector('section.mode')]};
+  const nav=document.createElement('div');nav.className='subnav';nav.setAttribute('role','tablist');
+  const names={partida:'Partida',mapa:'Mapa',amigos:'Con amigos'};let cur='partida';
+  try{cur=localStorage.getItem('mb-sub')||'partida'}catch(e){}if(!g[cur])cur='partida';
+  const show=k=>{cur=k;for(const n in g)for(const el of g[n])if(el)el.hidden=n!==k;for(const b of nav.children)b.setAttribute('aria-selected',b.dataset.s===k);tp.scrollTop=0;try{localStorage.setItem('mb-sub',k)}catch(e){}};
+  for(const k in names){const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.dataset.s=k;b.textContent=names[k];b.onclick=()=>{show(k);try{sfx('ui_click')}catch(e){}};nav.append(b)}
+  tp.querySelector('.hero').after(nav);show(cur);
+  window.boffSub=show;})();
+/* App de Android: actualización automática. La app baja sola la versión nueva del juego; aquí se avisa y el jugador
+   elige cuándo aplicarla (nunca en medio de una partida). Si hace falta una app nueva, se ofrece bajar el APK. */
+(function(){const A=window.BoffBomApp;if(!A||!A.updateInfo)return;let shown='';
+  const bar=(txt,btn,fn)=>{let b=$('updBar');if(!b){b=document.createElement('div');b.id='updBar';b.style.cssText='position:fixed;z-index:61;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;background:rgba(14,11,24,.95);border:1px solid var(--ember);border-radius:10px;padding:8px 10px;font-size:13px;max-width:calc(100% - 24px)';document.body.appendChild(b)}
+    b.innerHTML='';const t=document.createElement('span');t.textContent=txt;const k=document.createElement('button');k.textContent=btn;k.style.cssText='background:var(--ember);color:var(--night);font:700 13px var(--body);border:0;border-radius:8px;padding:6px 12px;cursor:pointer';k.onclick=fn;
+    const x=document.createElement('button');x.textContent='✕';x.setAttribute('aria-label','Cerrar');x.style.cssText='background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer';x.onclick=()=>b.remove();b.append(t,k,x)};
+  const check=()=>{let i={};try{i=JSON.parse(A.updateInfo())}catch(e){return}
+    if(started)return;   // nunca durante una partida: se vuelve a mirar al volver al menú
+    if(i.ready&&shown!==i.ready){shown=i.ready;bar('BoffBom '+i.ready+' ya está descargado.','Actualizar ahora',()=>{const b=$('updBar');if(b)b.textContent='Actualizando…';if(!A.applyUpdate())location.reload()})}
+    else if(i.app&&shown!=='app'+i.app){shown='app'+i.app;bar('BoffBom '+i.app+' necesita la app nueva.','Descargar',()=>A.openUrl(i.apk))}};
+  window.boffUpdate=check;setInterval(check,4000);setTimeout(check,1500)})();
 /* Red local: botones según dónde se abrió el juego */
 {const A=HOSTAPP,PORTN=A?A.port:8765,servedByHost=location.protocol==='http:'&&location.port==='8765'&&!['127.0.0.1','localhost'].includes(location.hostname);
  const okIp=ip=>typeof ip==='string'&&/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)&&!ip.startsWith('127.');
@@ -3733,5 +3807,4 @@ resize();setMap(selectedMap<0?0:selectedMap,true);menuInit();
 requestAnimationFrame(frame);
 })();
 </script>
-
 </body></html>
